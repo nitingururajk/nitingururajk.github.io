@@ -1,0 +1,72 @@
+<svg width="1400" height="700" viewBox="0 0 1400 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111118"/>
+      <stop offset="100%" stop-color="#0c0c10"/>
+    </linearGradient>
+    <linearGradient id="purpleGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c5cfc" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#7c5cfc" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="redPill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="bluePill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.08"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="700" rx="24" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1398" height="698" rx="23" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <!-- Title -->
+  <text x="700" y="58" fill="#f0f0f3" font-family="Inter, -apple-system, sans-serif" font-size="28" font-weight="800" text-anchor="middle">The timestamp trap</text>
+  <text x="700" y="88" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="17" text-anchor="middle">Only the timestamp changes, but that is enough to miss the cache.</text>
+
+  <!-- Request 1 card -->
+  <rect x="60" y="128" width="610" height="414" rx="18" fill="rgba(239,68,68,0.04)" stroke="rgba(239,68,68,0.15)" stroke-width="1"/>
+  <text x="94" y="170" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="13" font-weight="700" letter-spacing="0.14em">REQUEST 1</text>
+
+  <!-- Request 1 pills -->
+  <rect x="94" y="205" width="160" height="54" rx="27" fill="url(#redPill)" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+  <rect x="272" y="205" width="180" height="54" rx="27" fill="url(#bluePill)" stroke="rgba(96,165,250,0.3)" stroke-width="1"/>
+  <rect x="470" y="205" width="150" height="54" rx="27" fill="url(#bluePill)" stroke="rgba(96,165,250,0.3)" stroke-width="1"/>
+
+  <text x="174" y="239" fill="#fca5a5" font-family="'JetBrains Mono', monospace" font-size="18" font-weight="600" text-anchor="middle">12:01</text>
+  <text x="362" y="239" fill="#93c5fd" font-family="Inter, -apple-system, sans-serif" font-size="18" font-weight="600" text-anchor="middle">policy</text>
+  <text x="545" y="239" fill="#93c5fd" font-family="Inter, -apple-system, sans-serif" font-size="18" font-weight="600" text-anchor="middle">docs</text>
+
+  <text x="174" y="300" fill="#ef4444" font-family="Inter, -apple-system, sans-serif" font-size="13" font-weight="700" text-anchor="middle" opacity="0.8">DIFFERS</text>
+
+  <text x="94" y="430" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="18">First token changed.</text>
+  <text x="94" y="458" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="18">Shared prefix disappears entirely.</text>
+
+  <!-- Request 2 card -->
+  <rect x="730" y="128" width="610" height="414" rx="18" fill="rgba(239,68,68,0.04)" stroke="rgba(239,68,68,0.15)" stroke-width="1"/>
+  <text x="764" y="170" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="13" font-weight="700" letter-spacing="0.14em">REQUEST 2</text>
+
+  <!-- Request 2 pills -->
+  <rect x="764" y="205" width="160" height="54" rx="27" fill="url(#redPill)" stroke="rgba(239,68,68,0.3)" stroke-width="1"/>
+  <rect x="942" y="205" width="180" height="54" rx="27" fill="url(#bluePill)" stroke="rgba(96,165,250,0.3)" stroke-width="1"/>
+  <rect x="1140" y="205" width="150" height="54" rx="27" fill="url(#bluePill)" stroke="rgba(96,165,250,0.3)" stroke-width="1"/>
+
+  <text x="844" y="239" fill="#fca5a5" font-family="'JetBrains Mono', monospace" font-size="18" font-weight="600" text-anchor="middle">12:02</text>
+  <text x="1032" y="239" fill="#93c5fd" font-family="Inter, -apple-system, sans-serif" font-size="18" font-weight="600" text-anchor="middle">policy</text>
+  <text x="1215" y="239" fill="#93c5fd" font-family="Inter, -apple-system, sans-serif" font-size="18" font-weight="600" text-anchor="middle">docs</text>
+
+  <text x="844" y="300" fill="#ef4444" font-family="Inter, -apple-system, sans-serif" font-size="13" font-weight="700" text-anchor="middle" opacity="0.8">DIFFERS</text>
+
+  <text x="764" y="430" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="18">Everything after the timestamp matches,</text>
+  <text x="764" y="458" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="18">but reuse already failed at token one.</text>
+
+  <!-- Broken connector between cards -->
+  <path d="M670 232 L702 232" stroke="rgba(239,68,68,0.45)" stroke-width="3" stroke-dasharray="7 7"/>
+  <line x1="696" y1="218" x2="714" y2="246" stroke="rgba(239,68,68,0.7)" stroke-width="3"/>
+  <line x1="714" y1="218" x2="696" y2="246" stroke="rgba(239,68,68,0.7)" stroke-width="3"/>
+  <path d="M722 232 L730 232" stroke="rgba(239,68,68,0.45)" stroke-width="3" stroke-dasharray="7 7"/>
+
+  <!-- Accent line -->
+  <rect x="580" y="646" width="240" height="3" rx="2" fill="#7c5cfc" opacity="0.3"/>
+</svg>

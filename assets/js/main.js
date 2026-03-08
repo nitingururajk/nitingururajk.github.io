@@ -136,26 +136,18 @@
     return div.innerHTML;
   }
 
-  // Fetch posts from JSON manifest
-  fetch('posts/posts.json')
-    .then(function (res) {
-      if (!res.ok) throw new Error('No posts found');
-      return res.json();
-    })
-    .then(renderPosts)
-    .catch(function () {
-      // No posts file yet — show empty state
-      if (emptyState) emptyState.style.display = '';
-    });
+  // Fetch posts from JSON manifest only on pages that render the posts grid.
+  if (postsGrid) {
+    fetch('posts/posts.json')
+      .then(function (res) {
+        if (!res.ok) throw new Error('No posts found');
+        return res.json();
+      })
+      .then(renderPosts)
+      .catch(function () {
+        // No posts file yet — show empty state
+        if (emptyState) emptyState.style.display = '';
+      });
+  }
 
-  // ---- Smooth anchor scrolling ----
-  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-    link.addEventListener('click', function (e) {
-      var target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
 })();

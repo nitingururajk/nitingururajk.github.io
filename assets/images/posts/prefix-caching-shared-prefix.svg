@@ -1,0 +1,91 @@
+<svg width="1400" height="780" viewBox="0 0 1400 780" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111118"/>
+      <stop offset="100%" stop-color="#0c0c10"/>
+    </linearGradient>
+    <linearGradient id="purpleGlow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c5cfc" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#7c5cfc" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="greenPill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2dd4a0" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#2dd4a0" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="amberPill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="orangePill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fb923c" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#fb923c" stop-opacity="0.08"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="780" rx="24" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1398" height="778" rx="23" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+  <!-- Title -->
+  <text x="700" y="62" fill="#f0f0f3" font-family="Inter, -apple-system, sans-serif" font-size="28" font-weight="800" text-anchor="middle">Same prefix, different question</text>
+  <text x="700" y="94" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="17" text-anchor="middle">Requests A and B match through the shared prefix.</text>
+
+  <!-- Request A row -->
+  <rect x="64" y="140" width="1272" height="180" rx="16" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="96" y="176" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="13" font-weight="700" letter-spacing="0.14em">REQUEST A</text>
+
+  <!-- A pills -->
+  <rect x="96" y="196" width="260" height="48" rx="24" fill="url(#greenPill)" stroke="rgba(45,212,160,0.3)" stroke-width="1"/>
+  <rect x="372" y="196" width="250" height="48" rx="24" fill="url(#greenPill)" stroke="rgba(45,212,160,0.3)" stroke-width="1"/>
+  <rect x="638" y="196" width="290" height="48" rx="24" fill="url(#greenPill)" stroke="rgba(45,212,160,0.3)" stroke-width="1"/>
+  <rect x="944" y="196" width="300" height="48" rx="24" fill="url(#orangePill)" stroke="rgba(251,146,60,0.3)" stroke-width="1"/>
+
+  <text x="226" y="226" fill="#5eead4" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600" text-anchor="middle">System prompt</text>
+  <text x="497" y="226" fill="#5eead4" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600" text-anchor="middle">Context docs</text>
+  <text x="783" y="226" fill="#5eead4" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600" text-anchor="middle">Few-shot examples</text>
+  <text x="1094" y="226" fill="#fdba74" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600" text-anchor="middle">Question A</text>
+
+  <!-- Shared prefix bracket for A -->
+  <line x1="96" y1="262" x2="928" y2="262" stroke="#5eead4" stroke-width="2" stroke-opacity="0.4"/>
+  <line x1="96" y1="258" x2="96" y2="270" stroke="#5eead4" stroke-width="2" stroke-opacity="0.4"/>
+  <line x1="928" y1="258" x2="928" y2="270" stroke="#5eead4" stroke-width="2" stroke-opacity="0.4"/>
+  <text x="512" y="286" fill="#5eead4" font-family="Inter, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle" opacity="0.7">SHARED PREFIX</text>
+
+  <!-- Request B row -->
+  <rect x="64" y="340" width="1272" height="180" rx="16" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="96" y="376" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="13" font-weight="700" letter-spacing="0.14em">REQUEST B</text>
+
+  <!-- B pills -->
+  <rect x="96" y="396" width="260" height="48" rx="24" fill="url(#greenPill)" stroke="rgba(45,212,160,0.3)" stroke-width="1"/>
+  <rect x="372" y="396" width="250" height="48" rx="24" fill="url(#greenPill)" stroke="rgba(45,212,160,0.3)" stroke-width="1"/>
+  <rect x="638" y="396" width="290" height="48" rx="24" fill="url(#greenPill)" stroke="rgba(45,212,160,0.3)" stroke-width="1"/>
+  <rect x="944" y="396" width="300" height="48" rx="24" fill="url(#amberPill)" stroke="rgba(245,158,11,0.3)" stroke-width="1"/>
+
+  <text x="226" y="426" fill="#5eead4" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600" text-anchor="middle">System prompt</text>
+  <text x="497" y="426" fill="#5eead4" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600" text-anchor="middle">Context docs</text>
+  <text x="783" y="426" fill="#5eead4" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600" text-anchor="middle">Few-shot examples</text>
+  <text x="1094" y="426" fill="#fcd34d" font-family="Inter, -apple-system, sans-serif" font-size="17" font-weight="600" text-anchor="middle">Question B</text>
+
+  <!-- Shared prefix bracket for B -->
+  <line x1="96" y1="462" x2="928" y2="462" stroke="#5eead4" stroke-width="2" stroke-opacity="0.4"/>
+  <line x1="96" y1="458" x2="96" y2="470" stroke="#5eead4" stroke-width="2" stroke-opacity="0.4"/>
+  <line x1="928" y1="458" x2="928" y2="470" stroke="#5eead4" stroke-width="2" stroke-opacity="0.4"/>
+  <text x="512" y="486" fill="#5eead4" font-family="Inter, -apple-system, sans-serif" font-size="12" font-weight="600" text-anchor="middle" opacity="0.7">SHARED PREFIX</text>
+
+  <!-- Legend cards -->
+  <rect x="160" y="570" width="480" height="130" rx="14" fill="rgba(45,212,160,0.06)" stroke="rgba(45,212,160,0.2)" stroke-width="1"/>
+  <circle cx="196" cy="620" r="8" fill="#2dd4a0"/>
+  <text x="216" y="612" fill="#5eead4" font-family="Inter, -apple-system, sans-serif" font-size="22" font-weight="800">Reusable prefix</text>
+  <text x="216" y="642" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="15">System prompt, context, and examples</text>
+  <text x="216" y="668" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="15">can be reused from KV cache.</text>
+
+  <rect x="760" y="570" width="480" height="130" rx="14" fill="rgba(251,146,60,0.06)" stroke="rgba(251,146,60,0.2)" stroke-width="1"/>
+  <circle cx="796" cy="620" r="8" fill="#fb923c"/>
+  <text x="816" y="612" fill="#fdba74" font-family="Inter, -apple-system, sans-serif" font-size="22" font-weight="800">Fresh suffix</text>
+  <text x="816" y="642" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="15">Only the final question changes between requests.</text>
+  <text x="816" y="668" fill="#65657a" font-family="Inter, -apple-system, sans-serif" font-size="15">That is the only new prefill work here.</text>
+
+  <!-- Accent line at bottom -->
+  <rect x="580" y="746" width="240" height="3" rx="2" fill="#7c5cfc" opacity="0.3"/>
+</svg>
