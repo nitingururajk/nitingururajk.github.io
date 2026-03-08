@@ -1,6 +1,6 @@
 # Nitin's Blog
 
-My personal blog, hosted on GitHub Pages at **nitin.github.io**.
+My personal blog, hosted on GitHub Pages at **nitingururajk.github.io**.
 
 ## Structure
 
@@ -53,3 +53,5 @@ My personal blog, hosted on GitHub Pages at **nitin.github.io**.
 2. Push this code to the `main` branch
 3. Go to **Settings → Pages** and set source to `main` branch
 4. Your blog will be live at `https://<your-username>.github.io`
+
+For this deployed copy, the live URL is `https://nitingururajk.github.io`.
