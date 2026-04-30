@@ -427,11 +427,13 @@ function finishStream() {
 function appendBurst() {
   const tps = Number(els.tps.value);
   let burstSize = 1;
-  const burstChance = state.jitter === "high" ? 0.32 : state.jitter === "medium" ? 0.2 : 0.08;
-  if (Math.random() < burstChance) {
-    burstSize = Math.min(state.jitter === "high" ? 5 : 3, 1 + Math.floor(Math.random() * 4));
+  if (state.streamMode === "streaming") {
+    const burstChance = state.jitter === "high" ? 0.32 : state.jitter === "medium" ? 0.2 : 0.08;
+    if (Math.random() < burstChance) {
+      burstSize = Math.min(state.jitter === "high" ? 5 : 3, 1 + Math.floor(Math.random() * 4));
+    }
+    if (tps >= 70 && Math.random() < 0.3) burstSize += 1;
   }
-  if (tps >= 70 && Math.random() < 0.3) burstSize += 1;
 
   const remaining = state.tokens.length - state.index;
   const count = Math.max(1, Math.min(burstSize, remaining));
@@ -444,6 +446,9 @@ function appendBurst() {
 
 function nextDelayMs() {
   const base = 1000 / Number(els.tps.value);
+  if (state.streamMode === "instant") {
+    return Math.max(4, base);
+  }
   const profiles = {
     low: { min: 0.88, max: 1.16, pause: 0.02, pauseMax: 90 },
     medium: { min: 0.68, max: 1.52, pause: 0.06, pauseMax: 190 },
@@ -470,17 +475,6 @@ async function startStream({ restart = false } = {}) {
   await prepareTokens({ restart });
   if (!state.tokens.length) {
     setStatus("ready");
-    renderOutput();
-    return;
-  }
-
-  if (state.streamMode === "instant") {
-    state.outputText = els.sourceText.value;
-    state.index = state.tokens.length;
-    state.accumulatedMs = 0;
-    updateElapsed();
-    updateGenerated();
-    setStatus("completed");
     renderOutput();
     return;
   }
