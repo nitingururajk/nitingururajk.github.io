@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TokenFlow Lab</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <h1>TokenFlow Lab</h1>
+        <p>Explore SSE-style LLM streaming with real tokenizer profiles and adjustable throughput.</p>
+      </div>
+    </header>
+
+    <section class="panel input-panel" aria-labelledby="input-title">
+      <div class="panel-header">
+        <div>
+          <h2 id="input-title">Text Input</h2>
+          <p>Paste or type the text you want the assistant to generate.</p>
+        </div>
+        <button class="soft-button" id="loadSample" type="button">
+          <span class="material-symbols-rounded icon" aria-hidden="true">download</span>
+          Load Sample Text
+        </button>
+      </div>
+
+      <label class="sr-only" for="sourceText">Text to stream</label>
+      <textarea id="sourceText" spellcheck="true"></textarea>
+
+      <div class="token-preview">
+        <div class="token-preview-title">Token preview <span id="tokenPreviewMode">GPT cl100k</span></div>
+        <div class="token-chips" id="tokenChips" aria-label="Token preview chips"></div>
+      </div>
+
+      <div class="input-meta">
+        <div>
+          <span class="material-symbols-rounded mini-icon" aria-hidden="true">data_object</span>
+          Tokens: <strong id="tokenCount">0</strong>
+          <span class="meta-badge" id="generatedProfile">GPT cl100k</span>
+        </div>
+        <div>
+          <span class="material-symbols-rounded mini-icon" aria-hidden="true">notes</span>
+          Characters: <strong id="charCount">0</strong>
+        </div>
+        <button class="text-button" id="clearText" type="button">Clear</button>
+      </div>
+    </section>
+
+    <section class="panel output-panel" aria-labelledby="output-title">
+      <h2 class="sr-only" id="output-title">Streaming Output</h2>
+      <div class="message-row">
+        <div class="avatar" aria-hidden="true">
+          <span class="material-symbols-rounded">smart_toy</span>
+        </div>
+        <div class="assistant-card">
+          <div class="message-meta">
+            <strong>Assistant</strong>
+            <span>Just now</span>
+          </div>
+          <div class="bubble" id="output" aria-live="polite">
+            <span class="placeholder">Ready to stream. Press Start to begin.</span>
+          </div>
+          <div class="typing-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard" aria-labelledby="controls-title">
+      <div class="panel controls-panel">
+        <h2 class="sr-only" id="controls-title">Controls</h2>
+        <div class="control-top">
+          <div class="slider-area">
+            <div class="slider-label">
+              <label for="tps">Tokens per second (TPS)</label>
+              <span>300</span>
+            </div>
+            <input id="tps" type="range" min="1" max="300" value="35">
+            <span class="range-min">1</span>
+          </div>
+          <div class="tps-readout">
+            <span>TPS:</span>
+            <strong id="tpsStat">35</strong>
+            <small>tokens/sec</small>
+          </div>
+          <button class="action-button start" id="start" type="button">
+            <span class="material-symbols-rounded icon" aria-hidden="true">play_arrow</span>
+            Start
+          </button>
+          <button class="action-button pause" id="pause" type="button">
+            <span class="material-symbols-rounded icon" aria-hidden="true">pause</span>
+            Pause
+          </button>
+          <button class="action-button reset" id="reset" type="button">
+            <span class="material-symbols-rounded icon" aria-hidden="true">restart_alt</span>
+            Reset
+          </button>
+        </div>
+
+        <div class="control-grid">
+          <div class="control-field">
+            <label for="tokenProfile">Tokenizer</label>
+            <select id="tokenProfile" aria-label="Tokenizer profile">
+              <option value="gpt-cl100k" selected>tiktoken / cl100k_base</option>
+              <option value="gpt-o200k">tiktoken / o200k_base</option>
+              <option value="llama-approx">Llama 3 approx</option>
+              <option value="custom">Uploaded tokenizer.json</option>
+              <option value="word">Word chunks</option>
+              <option value="character">Character chunks</option>
+            </select>
+          </div>
+
+          <div class="loaded-tokenizer">
+            <span class="status-dot tokenizer-dot"></span>
+            <strong id="tokenizerStatus" aria-live="polite">cl100k_base</strong>
+          </div>
+
+          <div class="control-field">
+            <span class="field-label">Output mode</span>
+            <div class="segmented" role="group" aria-label="Streaming mode">
+              <button id="streamingMode" class="active" type="button">
+                <span class="material-symbols-rounded icon" aria-hidden="true">bolt</span>
+                Streaming mode
+              </button>
+              <button id="instantMode" type="button">Instant output</button>
+            </div>
+          </div>
+
+          <div class="control-field">
+            <span class="field-label">Thinking delay</span>
+            <div class="delay-control">
+              <button id="delayToggle" class="switch" type="button" aria-pressed="true" aria-label="Toggle thinking delay">On</button>
+              <input id="delaySeconds" type="number" min="0" max="5" step="0.1" value="0.7" aria-label="Thinking delay seconds">
+              <span>s</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="secondary-row">
+          <div class="control-field jitter-field">
+            <span class="field-label">Randomness / jitter</span>
+            <div class="segmented compact" role="group" aria-label="Randomness level">
+              <button class="jitter" data-jitter="low" type="button">Low</button>
+              <button class="jitter active" data-jitter="medium" type="button">Medium</button>
+              <button class="jitter" data-jitter="high" type="button">High</button>
+            </div>
+          </div>
+          <label class="file-button" for="tokenizerFile">
+            <span class="material-symbols-rounded icon" aria-hidden="true">upload_file</span>
+            Upload tokenizer.json
+          </label>
+          <input class="sr-only" id="tokenizerFile" type="file" accept=".json,application/json">
+          <button class="text-button danger" id="stop" type="button">Stop</button>
+        </div>
+      </div>
+
+      <aside class="panel status-panel" aria-labelledby="status-title">
+        <h2 id="status-title">Status</h2>
+        <div class="status-row">
+          <span class="material-symbols-rounded mini-icon" aria-hidden="true">token</span>
+          <span>Tokens generated</span>
+          <strong><span id="generatedCount">0</span> <span class="muted">of</span> <span id="totalTokens">0</span></strong>
+        </div>
+        <div class="status-row">
+          <span class="material-symbols-rounded mini-icon" aria-hidden="true">timer</span>
+          <span>Elapsed time</span>
+          <strong id="elapsed">00:00.00</strong>
+        </div>
+        <div class="status-row">
+          <span class="material-symbols-rounded mini-icon" aria-hidden="true">monitoring</span>
+          <span>Mode</span>
+          <strong class="mode-value"><span class="status-dot" id="statusDot"></span><span id="status">Ready</span></strong>
+        </div>
+        <div class="status-row">
+          <span class="material-symbols-rounded mini-icon" aria-hidden="true">speed</span>
+          <span>TPS (current)</span>
+          <strong id="sliderValue">35</strong>
+        </div>
+      </aside>
+    </section>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>
