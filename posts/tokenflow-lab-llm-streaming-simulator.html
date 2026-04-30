@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TokenFlow Lab: Visualizing LLM Streaming Speed | Nitin's Blog</title>
+  <meta name="description" content="TokenFlow Lab is a browser-based simulator for visualizing LLM decode speed, tokenization, TPS, and streaming cadence in chat-style output.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="../" class="nav-logo">N<span class="accent">.</span></a>
+      <div class="nav-links">
+        <a href="../" class="nav-link">Home</a>
+        <a href="../#posts" class="nav-link">Posts</a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <article class="post">
+    <header class="post-header">
+      <div class="container">
+        <a href="../#posts" class="back-link">&larr; Back to all posts</a>
+        <span class="post-tag">LLM Tools</span>
+        <h1 class="post-hero-title">TokenFlow Lab: Visualizing LLM Streaming Speed</h1>
+        <div class="post-meta-bar">
+          <time datetime="2026-04-30">Apr 30, 2026</time>
+          <span class="post-meta-divider"></span>
+          <span>4 min read</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="post-body container">
+      <p class="post-lead">
+        <a href="https://nitingururajk.github.io/tokenflow-lab/">TokenFlow Lab</a> is a small simulator for seeing what different LLM streaming speeds feel like. Paste some text, pick a tokenizer, set a tokens-per-second value, and watch the response appear in a chat-style output bubble.
+      </p>
+
+      <nav class="toc" aria-labelledby="toc-title">
+        <div class="toc-title" id="toc-title">Table of contents</div>
+        <ol class="toc-list">
+          <li><a href="#what-it-shows">What it shows</a></li>
+          <li><a href="#decode-speed">Decode speed, not prefill speed</a></li>
+          <li><a href="#tokenizers">Tokenizer profiles</a></li>
+          <li><a href="#streaming-modes">Streaming modes</a></li>
+          <li><a href="#how-to-read-it">How to read it</a></li>
+          <li><a href="#links">Links</a></li>
+        </ol>
+      </nav>
+
+      <div class="callout callout-note">
+        <strong>Short version:</strong> TokenFlow Lab is not an inference benchmark. It is a visual tool for building intuition around output token rate, token boundaries, and perceived streaming speed.
+      </div>
+
+      <h2 id="what-it-shows">What it shows</h2>
+      <p>
+        Tokens per second is easy to quote and hard to feel. A model that produces 20 tokens per second, 60 tokens per second, or 150 tokens per second can look very different in a real chat interface. TokenFlow Lab makes that visible without needing to run a model.
+      </p>
+      <p>
+        The app streams your selected text token by token, tracks generated tokens, shows elapsed time, and lets the TPS slider update the stream while it is running. You can pause, reset, switch tokenizer profiles, and compare steady output against more variable chunk timing.
+      </p>
+
+      <h2 id="decode-speed">Decode speed, not prefill speed</h2>
+      <p>
+        The TPS control represents decode speed: how quickly output tokens appear after generation has started. That is the part users experience as the response "streaming" onto the screen.
+      </p>
+      <p>
+        It does not model prefill or prefix processing. In real inference, the system still has to process the prompt before the first output token appears. That first-token delay can depend on prompt length, cached prefixes, batching, hardware, queueing, network latency, and serving stack behavior. TokenFlow Lab focuses on the output phase so the visual effect of decode TPS is easier to isolate.
+      </p>
+
+      <h2 id="tokenizers">Tokenizer profiles</h2>
+      <p>
+        A token is not necessarily a word. The same text can produce different token counts depending on the tokenizer used by the model. TokenFlow Lab includes GPT-style tokenizer profiles such as <code>cl100k_base</code> and <code>o200k_base</code>, plus simpler word and character modes for comparison.
+      </p>
+      <p>
+        There is also an upload option for a compatible <code>tokenizer.json</code>, which is useful when you want the preview to match a specific model family or fine-tuned model more closely. The token count and the generated-token counter are always tied to the selected tokenizer profile.
+      </p>
+
+      <h2 id="streaming-modes">Streaming modes</h2>
+      <p>
+        The simulator has two output styles. Steady TPS shows a clean, even-paced decode stream at the selected rate. Realistic mode adds jitter and small bursts so the output feels closer to how streaming often arrives in a UI.
+      </p>
+      <p>
+        Both modes still respect the selected TPS target. The difference is cadence: steady mode is useful when you want a clean speed comparison, while realistic mode is better for judging how uneven chunk timing changes the perceived smoothness of a response.
+      </p>
+
+      <h2 id="how-to-read-it">How to read it</h2>
+      <p>
+        Start with sample text, choose a tokenizer, and move the TPS slider. Low values make individual tokens obvious. Mid-range values feel like a typical streamed chat response. High values start to feel less like typing and more like a fast reveal.
+      </p>
+      <p>
+        The useful question is not only "how many tokens per second is this?" It is "what does this speed feel like to a person reading the response?" TokenFlow Lab is meant to make that question easier to answer visually.
+      </p>
+
+      <blockquote>
+        <p>
+          TokenFlow Lab is a decode-speed visualizer: it shows how output token rate feels once generation has started.
+        </p>
+      </blockquote>
+
+      <h2 id="links">Links</h2>
+      <ul class="references-list">
+        <li><a href="https://nitingururajk.github.io/tokenflow-lab/">Live demo: TokenFlow Lab</a></li>
+        <li><a href="https://github.com/nitingururajk/tokenflow-lab">Source on GitHub</a></li>
+        <li><a href="https://github.com/openai/tiktoken">OpenAI tiktoken</a></li>
+        <li><a href="https://github.com/dqbd/tiktoken">js-tiktoken</a></li>
+        <li><a href="https://huggingface.co/docs/tokenizers/index">Hugging Face tokenizers</a></li>
+      </ul>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Nitin. Built with curiosity and caffeine.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

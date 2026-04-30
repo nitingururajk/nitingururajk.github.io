@@ -1,5 +1,13 @@
 [
 	{
+		"title": "TokenFlow Lab: Visualizing LLM Streaming Speed",
+		"excerpt": "A browser-based simulator for seeing how different decode TPS values, tokenizer profiles, and streaming cadence feel in a chat-style interface.",
+		"date": "2026-04-30",
+		"tag": "LLM Tools",
+		"url": "posts/tokenflow-lab-llm-streaming-simulator.html",
+		"readTime": "4 min read"
+	},
+	{
 		"title": "Prefix Caching in LLM Inference: How It Works and How to Get It Wrong",
 		"excerpt": "A practical look at prefix caching across vLLM, SGLang, OpenAI, and Anthropic — how each system reuses KV cache, and the prompt-structuring mistakes that quietly kill your cache hit rate.",
 		"date": "2026-03-08",
