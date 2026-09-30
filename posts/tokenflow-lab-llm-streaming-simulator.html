@@ -3,115 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TokenFlow Lab: Visualizing LLM Streaming Speed | Nitin's Blog</title>
-  <meta name="description" content="TokenFlow Lab is a browser-based simulator for visualizing LLM decode speed, tokenization, TPS, and streaming cadence in chat-style output.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>TokenFlow Lab: an LLM streaming simulator — Nitin's blog</title>
+  <meta name="description" content="I built a browser tool that streams text at a chosen token rate. Here's how its tokenizers, speed control, and streaming modes work.">
+
+  <meta property="og:image" content="https://nitingururajk.github.io/assets/images/tokenflow-cover.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1536">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:image:alt" content="A green typewriter with blank paper curling across a wooden desk.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://nitingururajk.github.io/posts/tokenflow-lab-llm-streaming-simulator.html">
+  <meta property="og:title" content="TokenFlow Lab: an LLM streaming simulator — Nitin's blog">
+  <meta property="og:description" content="I built a browser tool that streams text at a chosen token rate. Here's how its tokenizers, speed control, and streaming modes work.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://nitingururajk.github.io/posts/tokenflow-lab-llm-streaming-simulator.html">
+  <link rel="icon" href="../assets/images/identity/nitin-favicon-light.png" type="image/png" sizes="64x64" data-logo-light="../assets/images/identity/nitin-favicon-light.png" data-logo-dark="../assets/images/identity/nitin-favicon-dark.png">
+  <link rel="preload" href="../assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <meta name="color-scheme" content="light dark">
+  <script src="../assets/js/theme.js"></script>
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/post.css">
 </head>
-<body>
-  <div class="grain" aria-hidden="true"></div>
-
-  <nav class="nav" id="nav">
-    <div class="nav-inner">
-      <a href="../" class="nav-logo">N<span class="accent">.</span></a>
+<body class="article-page">
+  <a class="skip-link" href="#main-content">Skip to article</a>
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <div class="nav-inner container">
+      <div class="brand"><a href="../" class="nav-logo" aria-label="Nitin's blog, home"><span class="brand-symbol" aria-hidden="true"><img class="logo-for-light" src="../assets/images/identity/nitin-logo-light.png" alt="" width="512" height="512"><img class="logo-for-dark" src="../assets/images/identity/nitin-logo-dark.png" alt="" width="512" height="512"></span><span>nitin<span class="accent">.</span></span></a><span class="nav-caption">Nitin's blog</span></div>
       <div class="nav-links">
-        <a href="../" class="nav-link">Home</a>
         <a href="../#posts" class="nav-link">Posts</a>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <a href="../tokenflow-lab/" class="nav-link">Lab</a>
+        <a href="../#about" class="nav-link">About</a>
+        <a href="https://github.com/nitingururajk" class="nav-link nav-github" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <button class="theme-toggle" id="theme-toggle" type="button" hidden aria-label="Switch to dark mode" aria-pressed="false">
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
       </div>
     </div>
   </nav>
 
+  <main id="main-content" tabindex="-1">
   <article class="post">
-    <header class="post-header">
-      <div class="container">
-        <a href="../#posts" class="back-link">&larr; Back to all posts</a>
+    <header class="post-header container">
+      <div class="post-header-top">
+        <a href="../#posts" class="back-link"><span aria-hidden="true">←</span> All posts</a>
+        <span class="article-number">POST / 02</span>
+      </div>
+      <div class="post-heading">
         <span class="post-tag">LLM Tools</span>
-        <h1 class="post-hero-title">TokenFlow Lab: Visualizing LLM Streaming Speed</h1>
+        <h1 class="post-hero-title title-tokenflow"><span class="title-name">TokenFlow Lab:</span> <em>an LLM streaming simulator</em></h1>
+        <p class="post-subtitle">Paste some text, set a token rate, and see how quickly you can read along.</p>
         <div class="post-meta-bar">
-          <time datetime="2026-04-30">Apr 30, 2026</time>
-          <span class="post-meta-divider"></span>
-          <span>4 min read</span>
+          <span class="post-author"><span class="author-initial" aria-hidden="true">N</span> By Nitin</span>
+          <time datetime="2026-04-30">April 30, 2026</time>
+          <span>3 min read</span>
         </div>
       </div>
+      <figure class="post-cover">
+        <img src="../assets/images/tokenflow-cover.webp" alt="A green typewriter with blank paper curling across a wooden desk." width="1536" height="1024" fetchpriority="high">
+        <figcaption><span>TokenFlow Lab</span><span aria-hidden="true">02</span></figcaption>
+      </figure>
     </header>
 
     <div class="post-body container">
       <p class="post-lead">
-        <a href="https://nitingururajk.github.io/tokenflow-lab/">TokenFlow Lab</a> is a small simulator for seeing what different LLM streaming speeds feel like. Paste some text, pick a tokenizer, set a tokens-per-second value, and watch the response appear in a chat-style output bubble.
+        I built <a href="../tokenflow-lab/">TokenFlow Lab</a> to see what different token rates look like in a chat window. You give it text and a speed, and it streams the text in your browser. You can try 20, 60, or 150 tokens per second without running a model.
       </p>
 
       <nav class="toc" aria-labelledby="toc-title">
-        <div class="toc-title" id="toc-title">Table of contents</div>
+        <div class="toc-title" id="toc-title">In this article</div>
         <ol class="toc-list">
           <li><a href="#what-it-shows">What it shows</a></li>
-          <li><a href="#decode-speed">Decode speed, not prefill speed</a></li>
+          <li><a href="#decode-speed">What the speed setting measures</a></li>
           <li><a href="#tokenizers">Tokenizer profiles</a></li>
           <li><a href="#streaming-modes">Streaming modes</a></li>
-          <li><a href="#how-to-read-it">How to read it</a></li>
+          <li><a href="#how-to-read-it">Try it</a></li>
           <li><a href="#links">Links</a></li>
         </ol>
       </nav>
 
       <div class="callout callout-note">
-        <strong>Short version:</strong> TokenFlow Lab is not an inference benchmark. It is a visual tool for building intuition around output token rate, token boundaries, and perceived streaming speed.
+        <strong>Before you start:</strong> This is a simulation. It plays back text you've already supplied, so it won't measure a model's performance.
       </div>
 
       <h2 id="what-it-shows">What it shows</h2>
       <p>
-        Tokens per second is easy to quote and hard to feel. A model that produces 20 tokens per second, 60 tokens per second, or 150 tokens per second can look very different in a real chat interface. TokenFlow Lab makes that visible without needing to run a model.
-      </p>
-      <p>
-        The app streams your selected text token by token, tracks generated tokens, shows elapsed time, and lets the TPS slider update the stream while it is running. You can pause, reset, switch tokenizer profiles, and compare steady output against more variable chunk timing.
+        The app shows the text token by token, with a running token count and elapsed time. The TPS slider works while the stream is running, so you can change the speed without starting over. There are pause and reset controls, a choice of tokenizers, and two streaming modes.
       </p>
 
-      <h2 id="decode-speed">Decode speed, not prefill speed</h2>
+      <h2 id="decode-speed">What the speed setting measures</h2>
       <p>
-        The TPS control represents decode speed: how quickly output tokens appear after generation has started. That is the part users experience as the response "streaming" onto the screen.
+        The TPS control represents decode speed: how quickly output tokens appear once generation has started.
       </p>
       <p>
-        It does not model prefill or prefix processing. In real inference, the system still has to process the prompt before the first output token appears. That first-token delay can depend on prompt length, cached prefixes, batching, hardware, queueing, network latency, and serving stack behavior. TokenFlow Lab focuses on the output phase so the visual effect of decode TPS is easier to isolate.
+        A real model also has to process the prompt before it can return the first token. That delay depends on prompt length, cached prefixes, batching, hardware, queueing, the network, and the serving software. TokenFlow Lab skips this prefill step; the speed setting applies only to the output.
       </p>
 
       <h2 id="tokenizers">Tokenizer profiles</h2>
       <p>
-        A token is not necessarily a word. The same text can produce different token counts depending on the tokenizer used by the model. TokenFlow Lab includes GPT-style tokenizer profiles such as <code>cl100k_base</code> and <code>o200k_base</code>, plus simpler word and character modes for comparison.
+        A token can be a word, part of a word, or a character, depending on the tokenizer and the text. The app includes GPT-style profiles such as <code>cl100k_base</code> and <code>o200k_base</code>, along with word and character modes for comparison. Changing the tokenizer can change the token count for the same text.
       </p>
       <p>
-        There is also an upload option for a compatible <code>tokenizer.json</code>, which is useful when you want the preview to match a specific model family or fine-tuned model more closely. The token count and the generated-token counter are always tied to the selected tokenizer profile.
+        You can also upload a compatible <code>tokenizer.json</code> if you want to use the tokenizer from a particular model family or fine-tuned model. Both the total and the running token count use whichever profile you've selected.
       </p>
 
       <h2 id="streaming-modes">Streaming modes</h2>
       <p>
-        The simulator has two output styles. Steady TPS shows a clean, even-paced decode stream at the selected rate. Realistic mode adds jitter and small bursts so the output feels closer to how streaming often arrives in a UI.
+        Steady TPS releases tokens at an even pace. Realistic mode adds jitter and small bursts, closer to the uneven delivery you sometimes see in a chat app.
       </p>
       <p>
-        Both modes still respect the selected TPS target. The difference is cadence: steady mode is useful when you want a clean speed comparison, while realistic mode is better for judging how uneven chunk timing changes the perceived smoothness of a response.
+        Both aim for the same selected TPS. Switch between them at one speed to see how much the pauses and bursts affect reading.
       </p>
 
-      <h2 id="how-to-read-it">How to read it</h2>
+      <h2 id="how-to-read-it">Try it</h2>
       <p>
-        Start with sample text, choose a tokenizer, and move the TPS slider. Low values make individual tokens obvious. Mid-range values feel like a typical streamed chat response. High values start to feel less like typing and more like a fast reveal.
+        Open the <a href="../tokenflow-lab/">demo</a>, pick some sample text and a tokenizer, then start the stream. Turn the slider down until you can follow each token. Bring it back up while reading the same passage. At higher speeds, you'll probably see the text arrive faster than you can read it.
       </p>
       <p>
-        The useful question is not only "how many tokens per second is this?" It is "what does this speed feel like to a person reading the response?" TokenFlow Lab is meant to make that question easier to answer visually.
+        Keep the tokenizer the same when comparing speeds. Otherwise, a change in token boundaries can affect how much text appears each second, even at the same TPS.
       </p>
-
-      <blockquote>
-        <p>
-          TokenFlow Lab is a decode-speed visualizer: it shows how output token rate feels once generation has started.
-        </p>
-      </blockquote>
 
       <h2 id="links">Links</h2>
       <ul class="references-list">
-        <li><a href="https://nitingururajk.github.io/tokenflow-lab/">Live demo: TokenFlow Lab</a></li>
+        <li><a href="../tokenflow-lab/">Live demo: TokenFlow Lab</a></li>
         <li><a href="https://github.com/nitingururajk/tokenflow-lab">Source on GitHub</a></li>
         <li><a href="https://github.com/openai/tiktoken">OpenAI tiktoken</a></li>
         <li><a href="https://github.com/dqbd/tiktoken">js-tiktoken</a></li>
@@ -120,12 +135,24 @@
     </div>
   </article>
 
+    <aside class="post-continuation container" aria-labelledby="continue-title">
+      <div class="post-endnote"><span aria-hidden="true">✳</span><p>Thanks for reading.</p><a href="../#posts">All posts <span aria-hidden="true">↗</span></a></div>
+      <div class="continue-heading"><h2 id="continue-title">Another post</h2><span class="eyebrow">On the blog</span></div>
+      <a class="continue-card" href="prefix-caching-llm-inference.html">
+        <img src="../assets/images/prefix-cache-cover.webp" alt="Two paper strips with the same green ink impressions beside a printing roller." width="1536" height="1024" loading="lazy">
+        <div class="continue-copy"><span class="eyebrow">LLM Systems · 9 min read</span><h3>How prefix caching works (and how I broke it)</h3><p>A timestamp at the top of my prompt stopped the cache from reusing almost 6,000 tokens.</p></div>
+        <span class="continue-arrow" aria-hidden="true">↗</span>
+      </a>
+    </aside>
+  </main>
+
   <footer class="footer">
-    <div class="container">
-      <p>&copy; <span id="year"></span> Nitin. Built with curiosity and caffeine.</p>
+    <div class="container footer-inner">
+      <a class="footer-logo" href="../"><span class="brand-symbol" aria-hidden="true"><img class="logo-for-light" src="../assets/images/identity/nitin-logo-light.png" alt="" width="512" height="512"><img class="logo-for-dark" src="../assets/images/identity/nitin-logo-dark.png" alt="" width="512" height="512"></span><span>nitin.</span></a>
+      <p>&copy; <span id="year">2026</span> Nitin.</p>
+      <a href="#main-content" class="back-to-top">Back to top <span aria-hidden="true">↑</span></a>
     </div>
   </footer>
-
   <script src="../assets/js/main.js"></script>
 </body>
 </html>

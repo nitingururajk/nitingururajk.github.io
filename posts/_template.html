@@ -3,75 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Post Title — Nitin's Blog</title>
-  <meta name="description" content="Post description goes here.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>Your post title — Nitin's blog</title>
+  <meta name="description" content="Replace this with a short description of the post.">
+  <link rel="icon" href="../assets/images/identity/nitin-favicon-light.png" type="image/png" sizes="64x64" data-logo-light="../assets/images/identity/nitin-favicon-light.png" data-logo-dark="../assets/images/identity/nitin-favicon-dark.png">
+  <link rel="preload" href="../assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <meta name="color-scheme" content="light dark">
+  <script src="../assets/js/theme.js"></script>
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/post.css">
 </head>
-<body>
-  <div class="grain" aria-hidden="true"></div>
-
-  <!-- Navigation -->
-  <nav class="nav" id="nav">
-    <div class="nav-inner">
-      <a href="../" class="nav-logo">N<span class="accent">.</span></a>
+<body class="article-page">
+  <a class="skip-link" href="#main-content">Skip to article</a>
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <div class="nav-inner container">
+      <div class="brand"><a href="../" class="nav-logo" aria-label="Nitin's blog, home"><span class="brand-symbol" aria-hidden="true"><img class="logo-for-light" src="../assets/images/identity/nitin-logo-light.png" alt="" width="512" height="512"><img class="logo-for-dark" src="../assets/images/identity/nitin-logo-dark.png" alt="" width="512" height="512"></span><span>nitin<span class="accent">.</span></span></a><span class="nav-caption">Nitin's blog</span></div>
       <div class="nav-links">
-        <a href="../" class="nav-link">Home</a>
         <a href="../#posts" class="nav-link">Posts</a>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <a href="../tokenflow-lab/" class="nav-link">Lab</a>
+        <a href="../#about" class="nav-link">About</a>
+        <a href="https://github.com/nitingururajk" class="nav-link nav-github" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <button class="theme-toggle" id="theme-toggle" type="button" hidden aria-label="Switch to dark mode" aria-pressed="false">
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
       </div>
     </div>
   </nav>
 
-  <!-- Post Content -->
+  <main id="main-content" tabindex="-1">
   <article class="post">
-    <header class="post-header">
-      <div class="container">
-        <a href="../#posts" class="back-link">&larr; Back to all posts</a>
+    <header class="post-header container">
+      <div class="post-header-top">
+        <a href="../#posts" class="back-link"><span aria-hidden="true">←</span> All posts</a>
+        <span class="article-number">POST / 03</span>
+      </div>
+      <div class="post-heading">
         <span class="post-tag">Category</span>
-        <h1 class="post-hero-title">Your Post Title Goes Here</h1>
+        <h1 class="post-hero-title">Your <em>post title</em></h1>
+        <p class="post-subtitle">Add a one-sentence description of the post.</p>
         <div class="post-meta-bar">
-          <time datetime="2026-01-01">Jan 1, 2026</time>
-          <span class="post-meta-divider"></span>
+          <span class="post-author"><span class="author-initial" aria-hidden="true">N</span> By Nitin</span>
+          <time datetime="2026-09-30">September 30, 2026</time>
           <span>5 min read</span>
         </div>
       </div>
+      <figure class="post-cover">
+        <img src="../assets/images/tokenflow-cover.webp" alt="A green typewriter with blank paper curling across a wooden desk." width="1536" height="1024" fetchpriority="high">
+        <figcaption><span>Add an image caption.</span><span aria-hidden="true">03</span></figcaption>
+      </figure>
     </header>
 
     <div class="post-body container">
-      <!-- Write your post content here using standard HTML -->
-      <p>
-        This is a template for your blog posts. Replace this content with
-        your own writing. You can use all standard HTML elements.
-      </p>
-
-      <h2>Subheading</h2>
-      <p>More content here...</p>
-
-      <pre><code>// Code blocks look great too
+      <!-- Add the published post to posts/posts.json with its cover, excerpt, and reading time. -->
+      <p class="post-lead">Write the opening paragraph here.</p>
+      <nav class="toc" aria-labelledby="toc-title">
+        <div class="toc-title" id="toc-title">In this article</div>
+        <ol class="toc-list"><li><a href="#the-idea">The idea</a></li><li><a href="#what-i-learned">What I learned</a></li></ol>
+      </nav>
+      <h2 id="the-idea">The idea</h2>
+      <p>Describe what you built or tried, with an example.</p>
+      <pre tabindex="0" aria-label="Code example"><code>// Replace with your example.
 function hello() {
   console.log("Hello, world!");
 }</code></pre>
-
-      <blockquote>
-        <p>Blockquotes can be used for highlighting key ideas or quotes.</p>
-      </blockquote>
+      <div class="callout callout-note"><strong>Note:</strong> Add any context the example needs.</div>
+      <h2 id="what-i-learned">What I learned</h2>
+      <p>Describe what happened and what you would change next time.</p>
     </div>
   </article>
 
-  <!-- Footer -->
+    <aside class="post-continuation container" aria-labelledby="continue-title">
+      <div class="post-endnote"><span aria-hidden="true">✳</span><p>Thanks for reading.</p><a href="../#posts">All posts <span aria-hidden="true">↗</span></a></div>
+      <div class="continue-heading"><h2 id="continue-title">Another post</h2><span class="eyebrow">On the blog</span></div>
+      <a class="continue-card" href="prefix-caching-llm-inference.html">
+        <img src="../assets/images/prefix-cache-cover.webp" alt="Two paper strips with the same green ink impressions beside a printing roller." width="1536" height="1024" loading="lazy">
+        <div class="continue-copy"><span class="eyebrow">LLM Systems · 9 min read</span><h3>How prefix caching works (and how I broke it)</h3><p>A timestamp at the top of my prompt stopped the cache from reusing almost 6,000 tokens.</p></div>
+        <span class="continue-arrow" aria-hidden="true">↗</span>
+      </a>
+    </aside>
+  </main>
+
   <footer class="footer">
-    <div class="container">
-      <p>&copy; <span id="year"></span> Nitin. Built with curiosity and caffeine.</p>
+    <div class="container footer-inner">
+      <a class="footer-logo" href="../"><span class="brand-symbol" aria-hidden="true"><img class="logo-for-light" src="../assets/images/identity/nitin-logo-light.png" alt="" width="512" height="512"><img class="logo-for-dark" src="../assets/images/identity/nitin-logo-dark.png" alt="" width="512" height="512"></span><span>nitin.</span></a>
+      <p>&copy; <span id="year">2026</span> Nitin.</p>
+      <a href="#main-content" class="back-to-top">Back to top <span aria-hidden="true">↑</span></a>
     </div>
   </footer>
-
   <script src="../assets/js/main.js"></script>
 </body>
 </html>

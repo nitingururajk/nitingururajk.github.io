@@ -1,18 +1,38 @@
 [
 	{
-		"title": "TokenFlow Lab: Visualizing LLM Streaming Speed",
-		"excerpt": "A browser-based simulator for seeing how different decode TPS values, tokenizer profiles, and streaming cadence feel in a chat-style interface.",
+		"title": "TokenFlow Lab: an LLM streaming simulator",
+		"excerpt": "A browser tool I built to see what different token rates look like in a chat response.",
 		"date": "2026-04-30",
 		"tag": "LLM Tools",
 		"url": "posts/tokenflow-lab-llm-streaming-simulator.html",
-		"readTime": "4 min read"
+		"readTime": "3 min read",
+		"category": "tools",
+		"number": "02",
+		"image": "assets/images/tokenflow-cover.webp",
+		"imageAlt": "A green typewriter with blank paper curling across a wooden desk.",
+		"preview": "TokenFlow Lab streams text you provide at a chosen token rate. You can change the speed while it runs, compare tokenizers, and switch between even timing and small bursts. It simulates the output phase; it doesn't measure model performance or time to first token.",
+		"takeaways": [
+			"The TPS slider changes the stream as it runs.",
+			"The selected tokenizer determines the token count and boundaries.",
+			"Steady and realistic modes use different timing at the same target rate."
+		]
 	},
 	{
-		"title": "Prefix Caching in LLM Inference: How It Works and How to Get It Wrong",
-		"excerpt": "A practical look at prefix caching across vLLM, SGLang, OpenAI, and Anthropic — how each system reuses KV cache, and the prompt-structuring mistakes that quietly kill your cache hit rate.",
+		"title": "How prefix caching works (and how I broke it)",
+		"excerpt": "I put a timestamp ahead of a 6,000-token shared prompt and lost the cache hits. Moving it fixed the problem.",
 		"date": "2026-03-08",
 		"tag": "LLM Systems",
 		"url": "posts/prefix-caching-llm-inference.html",
-		"readTime": "12 min read"
+		"readTime": "9 min read",
+		"category": "systems",
+		"number": "01",
+		"image": "assets/images/prefix-cache-cover.webp",
+		"imageAlt": "Two paper strips with the same green ink impressions beside a printing roller.",
+		"preview": "Prefix caching reuses KV state when requests start with the same tokens. I go through how vLLM, SGLang, OpenAI, and Anthropic handle it, then explain how a timestamp in my prompt builder stopped nearly 6,000 shared tokens from being reused.",
+		"takeaways": [
+			"A shared prefix needs identical tokens, including formatting.",
+			"Each serving system has its own cache controls and reuse rules.",
+			"Putting timestamps after the shared context restored my cache hits."
+		]
 	}
 ]

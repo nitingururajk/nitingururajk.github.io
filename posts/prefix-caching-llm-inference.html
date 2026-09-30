@@ -3,52 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prefix Caching in LLM Inference: How It Works and How to Get It Wrong | Nitin's Blog</title>
-  <meta name="description" content="A practical guide to prefix caching in LLM inference — what it is, how it works, and the prompt-structure mistakes that silently kill your cache hit rate.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>How prefix caching works (and how I broke it) — Nitin's blog</title>
+  <meta name="description" content="A timestamp at the start of my prompt stopped a 6,000-token prefix from being reused. What went wrong, how I fixed it, and how four inference systems handle caching.">
+
+  <meta property="og:image" content="https://nitingururajk.github.io/assets/images/prefix-cache-cover.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1536">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:image:alt" content="Two paper strips with the same green ink impressions beside a printing roller.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://nitingururajk.github.io/posts/prefix-caching-llm-inference.html">
+  <meta property="og:title" content="How prefix caching works (and how I broke it) — Nitin's blog">
+  <meta property="og:description" content="A timestamp at the start of my prompt stopped a 6,000-token prefix from being reused. What went wrong, how I fixed it, and how four inference systems handle caching.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://nitingururajk.github.io/posts/prefix-caching-llm-inference.html">
+  <link rel="icon" href="../assets/images/identity/nitin-favicon-light.png" type="image/png" sizes="64x64" data-logo-light="../assets/images/identity/nitin-favicon-light.png" data-logo-dark="../assets/images/identity/nitin-favicon-dark.png">
+  <link rel="preload" href="../assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <meta name="color-scheme" content="light dark">
+  <script src="../assets/js/theme.js"></script>
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="stylesheet" href="../assets/css/post.css">
 </head>
-<body>
-  <div class="grain" aria-hidden="true"></div>
-
-  <nav class="nav" id="nav">
-    <div class="nav-inner">
-      <a href="../" class="nav-logo">N<span class="accent">.</span></a>
+<body class="article-page">
+  <a class="skip-link" href="#main-content">Skip to article</a>
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <div class="nav-inner container">
+      <div class="brand"><a href="../" class="nav-logo" aria-label="Nitin's blog, home"><span class="brand-symbol" aria-hidden="true"><img class="logo-for-light" src="../assets/images/identity/nitin-logo-light.png" alt="" width="512" height="512"><img class="logo-for-dark" src="../assets/images/identity/nitin-logo-dark.png" alt="" width="512" height="512"></span><span>nitin<span class="accent">.</span></span></a><span class="nav-caption">Nitin's blog</span></div>
       <div class="nav-links">
-        <a href="../" class="nav-link">Home</a>
         <a href="../#posts" class="nav-link">Posts</a>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <a href="../tokenflow-lab/" class="nav-link">Lab</a>
+        <a href="../#about" class="nav-link">About</a>
+        <a href="https://github.com/nitingururajk" class="nav-link nav-github" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <button class="theme-toggle" id="theme-toggle" type="button" hidden aria-label="Switch to dark mode" aria-pressed="false">
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
       </div>
     </div>
   </nav>
 
+  <main id="main-content" tabindex="-1">
   <article class="post">
-    <header class="post-header">
-      <div class="container">
-        <a href="../#posts" class="back-link">&larr; Back to all posts</a>
+    <header class="post-header container">
+      <div class="post-header-top">
+        <a href="../#posts" class="back-link"><span aria-hidden="true">←</span> All posts</a>
+        <span class="article-number">POST / 01</span>
+      </div>
+      <div class="post-heading">
         <span class="post-tag">LLM Systems</span>
-        <h1 class="post-hero-title">Prefix Caching in LLM Inference: How It Works and How to Get It Wrong</h1>
+        <h1 class="post-hero-title">How prefix caching works <em>(and how I broke it)</em></h1>
+        <p class="post-subtitle">I put a timestamp before 6,000 tokens of shared context. That was enough to lose the cache hits.</p>
         <div class="post-meta-bar">
-          <time datetime="2026-03-08">Mar 8, 2026</time>
-          <span class="post-meta-divider"></span>
-          <span>8 min read</span>
+          <span class="post-author"><span class="author-initial" aria-hidden="true">N</span> By Nitin</span>
+          <time datetime="2026-03-08">March 8, 2026</time>
+          <span>9 min read</span>
         </div>
       </div>
+      <figure class="post-cover">
+        <img src="../assets/images/prefix-cache-cover.webp" alt="Two paper strips with the same green ink impressions beside a printing roller." width="1536" height="1024" fetchpriority="high">
+        <figcaption><span>Prefix caching in LLM inference</span><span aria-hidden="true">01</span></figcaption>
+      </figure>
     </header>
 
     <div class="post-body container">
       <p class="post-lead">
-        Prefix caching is one of those optimizations that feels almost unfair when your workload is prompt-heavy: keep the stable part of the prompt identical, and the inference engine can skip recomputing a large chunk of prefill work. But it is also easy to quietly sabotage with prompt structure mistakes.
+        I had a workload with a long system prompt and a short question at the end. Most of the prompt stayed the same between requests, so I expected prefix caching to save a lot of prefill work. It wasn't working as well as it should have. My prompt builder was adding a fresh timestamp before all that shared text.
       </p>
 
       <nav class="toc" aria-labelledby="toc-title">
-        <div class="toc-title" id="toc-title">Table of contents</div>
+        <div class="toc-title" id="toc-title">In this article</div>
         <ol class="toc-list">
           <li><a href="#what-is-prefix-caching">What is prefix caching?</a></li>
           <li>
@@ -58,89 +82,89 @@
               <li><a href="#sglang-radixattention">SGLang (RadixAttention)</a></li>
               <li><a href="#openai-api">OpenAI API</a></li>
               <li><a href="#anthropic-api">Anthropic API</a></li>
-              <li><a href="#use-it-well-everywhere">What "use it well" looks like</a></li>
+              <li><a href="#use-it-well-everywhere">How to order the prompt</a></li>
             </ul>
           </li>
           <li>
-            <a href="#common-mistakes-i-made">Common mistakes I made: lessons learned</a>
+            <a href="#common-mistakes-i-made">The timestamp bug</a>
             <ul class="toc-sublist">
-              <li><a href="#why-this-is-so-easy-to-miss">Why this is so easy to miss</a></li>
-              <li><a href="#what-it-cost-me">What it cost me: prefill throughput dropped 1.5&times; overnight</a></li>
-              <li><a href="#practical-checklist">A practical checklist I now follow</a></li>
+              <li><a href="#why-this-is-so-easy-to-miss">Why I missed it</a></li>
+              <li><a href="#what-it-cost-me">The slowdown and the fix</a></li>
+              <li><a href="#practical-checklist">What I check now</a></li>
             </ul>
           </li>
-          <li><a href="#conclusion">Conclusion</a></li>
+          <li><a href="#conclusion">Check the actual prompts</a></li>
           <li><a href="#references">References</a></li>
         </ol>
       </nav>
 
       <div class="callout callout-note">
-        <strong>TLDR version:</strong> prefix caching only helps when requests share the same beginning of the prompt. If you place dynamic values like timestamps, UUIDs, or request-specific metadata at the top, you destroy the shared prefix and pay the full prefill cost again.
+        <strong>Check the beginning of your prompt.</strong> A timestamp, UUID, or other changing field near the top stops the cache from reusing the text after it. Put shared instructions and context first.
       </div>
 
       <h2 id="what-is-prefix-caching">1. What is prefix caching?</h2>
       <p>
-        During prefill, the model processes the prompt token by token and writes key/value tensors into the KV cache. If another request arrives with the same prompt prefix, an inference engine can reuse the already computed KV state for that shared prefix instead of recomputing it from scratch.
+        During prefill, the model processes the prompt tokens, typically in parallel, and writes their key/value tensors into the KV cache. When another request starts with the same tokens, the inference engine can reuse that cached state and skip the repeated computation.
       </p>
       <p>
-        In practice, this matters a lot for workloads where prompts have a large stable prefix: long system prompts, long instructions, retrieved documents, tool schemas, policy text, or large tables. Only the tail changes from request to request.
+        This helps when a large part of the prompt stays the same: a system prompt, instructions, retrieved documents, tool schemas, policy text, or a table. You can cache that shared beginning and process the new question at the end.
       </p>
 
       <figure class="external-figure">
         <img src="../assets/images/posts/prefix-caching-shared-prefix.svg" alt="Two prompt requests share the same system prompt, context docs, and few-shot examples, while only the final question changes. The shared prefix is marked as reusable work and the tail is marked as fresh work." loading="lazy">
         <figcaption>
-          The bracketed prefix under both rows is identical: system prompt, context docs, and few-shot examples. Only the final question chip changes, so that is the only part that needs fresh prefill work.
+          Both requests start with the same system prompt, documents, and examples. The final question is the only new part to process.
         </figcaption>
       </figure>
 
       <p>
-        The important mental model is simple: prefix caching is not semantic caching. The engine does not care that two prompts are “similar”. It cares that the token prefix matches exactly.
+        The tokens have to match exactly, in the same order. Rewording a sentence can break the match even when its meaning stays the same. Semantic caching, which matches by meaning, is a separate technique.
       </p>
 
       <figure class="external-figure">
         <img src="../assets/images/posts/kv-cache-sharing-patterns.jpg" alt="Four KV cache sharing patterns in LLM workloads: few-shot learning, self-consistency, multi-turn chat, and tree-of-thought." loading="lazy">
         <figcaption>
-          Panels (a) through (d) show four concrete reuse patterns: shared few-shot examples, one prompt branching into multiple generations, growing chat history, and tree-style search paths that all start from a common prefix. Blue boxes are reusable prompt tokens, green boxes are new branches, and yellow boxes are outputs. (Source: <a href="https://lmsys.org/blog/2024-01-17-sglang/">LMSYS SGLang blog</a>)
+          Four ways requests can share a prefix: few-shot examples, multiple generations from one prompt, chat history, and tree-style search. Blue boxes are reusable prompt tokens, green boxes are new branches, and yellow boxes are outputs. (Source: <a href="https://lmsys.org/blog/2024-01-17-sglang/">LMSYS SGLang blog</a>)
         </figcaption>
       </figure>
 
       <h2 id="how-different-systems-implement-it">2. How different systems implement it</h2>
 
       <p>
-        The core idea is the same everywhere — reuse previously computed KV cache entries when the prompt prefix matches — but the mechanism and the knobs differ across systems.
+        vLLM, SGLang, OpenAI, and Anthropic all support prefix caching. They differ in how they store the cache and what you need to configure.
       </p>
 
       <figure class="external-figure">
         <img src="../assets/images/posts/prefix-caching-blocks-overview.svg" alt="A four-block overview of prefix caching. The first three blocks are cached and reusable for stable prompt content, while the fourth block is live only for the request-specific tail." loading="lazy">
         <figcaption>
-          The first three cards are cached blocks that can be reused across requests. Reuse stops at block 4, where the prompt becomes request-specific and the system has to compute new KV state live.
+          Blocks 1–3 are already cached. Block 4 contains the new part of the prompt and needs new KV state.
         </figcaption>
       </figure>
 
       <figure class="external-figure">
         <img src="../assets/images/posts/radix-attention-tree.jpg" alt="RadixAttention tree operations showing how KV cache entries are stored, reused, and evicted across multiple requests in SGLang." loading="lazy">
         <figcaption>
-          Each numbered panel shows a different radix-tree cache state as requests are inserted, reused, branched, or evicted. Blue nodes are reused prefixes, green nodes are newly added branches, and orange dashed nodes are evicted entries. (Source: <a href="https://lmsys.org/blog/2024-01-17-sglang/">LMSYS SGLang blog</a>)
+          The radix tree changes as requests arrive and old entries are evicted. Blue nodes are reused prefixes, green nodes are new branches, and orange dashed nodes are evicted entries. (Source: <a href="https://lmsys.org/blog/2024-01-17-sglang/">LMSYS SGLang blog</a>)
         </figcaption>
       </figure>
 
       <figure class="external-figure">
         <img src="../assets/images/posts/vllm-prefix-caching-example.png" alt="vLLM prefix caching example showing block allocation, cache hits, and eviction across multiple requests." loading="lazy">
         <figcaption>
-          The second request reuses block IDs 0 and 1 from the first request because those full-token blocks hash to the same prefixes. The new <code>A-J,kl</code> block is allocated separately, which is the behavior vLLM uses for block-level prefix caching. (Source: <a href="https://docs.vllm.ai/en/latest/design/v1/prefix_caching.html">vLLM documentation</a>)
+          The second request reuses block IDs 0 and 1 because their hashes match. vLLM allocates the new <code>A-J,kl</code> block separately. (Source: <a href="https://docs.vllm.ai/en/latest/design/v1/prefix_caching.html">vLLM documentation</a>)
         </figcaption>
       </figure>
 
       <h3 id="vllm">vLLM</h3>
       <p>
-        vLLM has automatic prefix caching built into its KV cache manager. It hashes KV cache blocks based on the tokens in the block and the prefix that came before it. When a new request arrives, vLLM looks up already-computed blocks and reuses them if the prefix matches. Caching is <em>block-based</em> rather than prompt-based, and only full blocks are reusable — a partial trailing block is not cached until it fills up.
+        vLLM's KV cache manager hashes each block using its tokens and the prefix before it. For a new request, it looks up those hashes and reuses matching blocks. Only full blocks can be reused; a partial block at the end has to fill up before it can be cached.
       </p>
 
       <p>
-        Put the heavy stable prefix first, then vary only the smallest possible suffix:
+        In this example, both requests use the same instructions and table. Only the question changes:
       </p>
 
-      <pre><code>from vllm import LLM, SamplingParams
+      <pre tabindex="0" aria-label="Code example"><code>from vllm import LLM, SamplingParams
 
 llm = LLM(
     model="meta-llama/Meta-Llama-3.1-8B-Instruct",
@@ -171,18 +195,18 @@ print(output_b.outputs[0].text)
 </code></pre>
 
       <p>
-        The second request benefits because most of the prefix is identical. vLLM matches previously computed blocks instead of rebuilding them. As of v0.11, the default block hash algorithm is <code>sha256</code>, and only full blocks are cacheable.
+        The second request can reuse any full blocks from the shared prefix. As of v0.11, vLLM uses <code>sha256</code> as its default block hash algorithm.
       </p>
 
       <h3 id="sglang-radixattention">SGLang (RadixAttention)</h3>
       <p>
-        SGLang exposes prefix caching through <em>RadixAttention</em>. The current docs describe it as the serving runtime's prefix-caching mechanism, and the server keeps it enabled unless you explicitly launch with <code>--disable-radix-cache</code>.
+        SGLang uses <em>RadixAttention</em> for prefix caching. It is enabled by default when serving, unless you pass <code>--disable-radix-cache</code> when starting the server.
       </p>
       <p>
-        In practice, this is a good fit for workloads where many requests share a long common prefix, such as multi-turn chat with a stable system prompt or repeated calls over the same retrieved context.
+        It can reuse a stable system prompt across chat turns, or shared documents across several questions. The example below uses the same system prompt for both calls.
       </p>
 
-      <pre><code># Start the server separately:
+      <pre tabindex="0" aria-label="Code example"><code># Start the server separately:
 # sglang serve \
 #   --model-path meta-llama/Meta-Llama-3.1-8B-Instruct \
 #   --port 30000
@@ -211,15 +235,15 @@ qa.run(question="What is 3 + 5?")
 </code></pre>
 
       <p>
-        Radix cache is enabled by default in normal SGLang serving. The runtime figures out what can be reused from the tree and only computes the new tail.
+        The runtime looks up the shared prefix in the radix tree, then computes the new part of each request.
       </p>
 
       <h3 id="openai-api">OpenAI API</h3>
       <p>
-        OpenAI prompt caching is automatic for prompts that are 1024 tokens or longer. There is nothing to enable in code for the basic feature, and you can monitor cache hits through <code>usage.prompt_tokens_details.cached_tokens</code>. If you want tighter routing for repeated workloads, the current docs also recommend using <code>prompt_cache_key</code> consistently across matching requests.
+        OpenAI automatically caches prompts of 1024 tokens or more. Check <code>usage.prompt_tokens_details.cached_tokens</code> to see how many tokens were reused. The docs also recommend a consistent <code>prompt_cache_key</code> for matching requests to help route them to the same cache.
       </p>
 
-      <pre><code>from openai import OpenAI
+      <pre tabindex="0" aria-label="Code example"><code>from openai import OpenAI
 
 client = OpenAI()
 
@@ -254,15 +278,15 @@ print(r2.usage.prompt_tokens_details.cached_tokens)
 </code></pre>
 
       <p>
-        The <code>cached_tokens</code> field in the response tells you how many prompt tokens hit the cache. With the default in-memory policy, cached prefixes generally stay active for 5 to 10 minutes of inactivity, up to a maximum of one hour; supported models can also request 24-hour retention with <code>prompt_cache_retention</code>.
+        With the default in-memory policy, cached prefixes generally last for 5 to 10 minutes of inactivity, up to a maximum of one hour. Supported models also accept <code>prompt_cache_retention</code> for 24-hour retention.
       </p>
 
       <h3 id="anthropic-api">Anthropic API</h3>
       <p>
-        Anthropic offers both automatic and explicit caching. For automatic caching, add a single <code>cache_control</code> field at the top level of your request — the system places the cache breakpoint at the last cacheable block and moves it forward as the conversation grows. For finer control, you can define up to four cache breakpoints in the request.
+        Anthropic supports automatic and explicit caching. For automatic caching, add <code>cache_control</code> at the top level of the request. The cache breakpoint starts at the last cacheable block and moves forward as the conversation grows. You can also set up to four breakpoints yourself.
       </p>
 
-      <pre><code>import anthropic
+      <pre tabindex="0" aria-label="Code example"><code>import anthropic
 
 client = anthropic.Anthropic()
 
@@ -300,46 +324,46 @@ print(r2.usage.cache_creation_input_tokens)
 </code></pre>
 
       <p>
-        Anthropic prices prompt caching in three parts: 5-minute cache writes cost 1.25× the base input rate, 1-hour cache writes cost 2×, and cache reads cost 0.1×. The default minimum TTL is 5 minutes and refreshes on use. Minimum cacheable length varies by model: 1024, 2048, or 4096 tokens.
+        A 5-minute cache write costs 1.25× the base input rate. A 1-hour write costs 2×, and a cache read costs 0.1×. The default minimum TTL is 5 minutes and refreshes on use. The minimum cacheable length depends on the model: 1024, 2048, or 4096 tokens.
       </p>
 
-      <h3 id="use-it-well-everywhere">What "use it well" looks like (everywhere)</h3>
+      <h3 id="use-it-well-everywhere">How to order the prompt</h3>
       <ul class="checklist">
         <li>Keep the system prompt stable across requests.</li>
         <li>Place large shared context before request-specific details.</li>
-        <li>Move dynamic fields as far to the end as possible.</li>
-        <li>Reuse the same formatting and tokenization, not just the same meaning.</li>
+        <li>Put changing fields near the end.</li>
+        <li>Keep formatting identical so the tokens match too.</li>
       </ul>
 
-      <h2 id="common-mistakes-i-made">3. Common mistakes I made: lessons learned</h2>
+      <h2 id="common-mistakes-i-made">3. The timestamp bug</h2>
       <p>
-        My biggest mistake was putting dynamic content at the <em>start</em> of the prompt instead of near the end. The classic example is timestamp information.
+        I put the current time at the very start of my prompt, before the instructions and context.
       </p>
       <p>
-        I had prompts that started with something like “Current timestamp: 2026-03-08T12:34:56Z” before the stable instruction and context. That means every request started with different tokens, so the prefix was different from token one. The result: cache miss, every time.
+        Each request started with something like “Current timestamp: 2026-03-08T12:34:56Z”. A few opening tokens still matched, but the changing timestamp broke the prefix before the engine reached the long shared section.
       </p>
-      <h3 id="why-this-is-so-easy-to-miss">Why this is so easy to miss</h3>
+      <h3 id="why-this-is-so-easy-to-miss">Why I missed it</h3>
       <p>
-        The insidious thing about this mistake is that <em>nothing breaks</em>. The outputs are still correct, but your prompt-response end-to-end latency starts creeping up, and the symptom is ambiguous. Especially in a self-hosted setup, it is easy to wonder whether the slowdown is coming from GPU VRAM pressure, a prompt that got too long, queueing or batching effects, network delay, or some other serving bottleneck when the real issue is simply that the shared prefix is no longer reusable.
+        The responses were still correct. The problem showed up in latency, which didn't give me much to go on. A self-hosted model can slow down for plenty of reasons: VRAM pressure, longer prompts, queueing, batching, network delay, or other serving bottlenecks.
       </p>
       <p>
-        That is what makes it hard to debug: the latency regression looks like a generic inference problem, not obviously a prompt-construction bug. It is also a natural place to put metadata. When you are building a prompt template, the instinct is to set context at the top: "here is who you are, here is what time it is, here is the user's ID." That reads well to a human. But to the inference engine, every unique first token means a completely new prefix, even if the remaining 4,000 tokens are identical.
+        A timestamp at the top also looks reasonable when you're reading the prompt. It's context for the model. But if the first token changes, the cache can't reuse the next 4,000 tokens as a prefix, even if they're identical. You have to compare what the prompt builder actually sends across requests to see the problem.
       </p>
 
-      <h3 id="what-it-cost-me">What it cost me: prefill throughput dropped 1.5&times; overnight</h3>
+      <h3 id="what-it-cost-me">The slowdown and the fix</h3>
       <p>
-        I learned this the hard way. I was running a workload with a ~6,000-token system prompt containing various instructions, examples, and context, but the tail was still a short user query. Prefix caching should have made this nearly free after the first request. Instead, I noticed the <strong>prefill rate</strong> (the speed at which the engine processes prompt tokens before generating the first output token) had degraded by at least 1.5&times; compared to what I expected.
+        My system prompt was around 6,000 tokens of instructions, examples, and context, followed by a short user query. The <strong>prefill rate</strong>, the speed at which the engine processes input before generating the first output token, was at least 1.5&times; worse than I expected. Most of those 6,000 tokens should have been reusable after the first request.
       </p>
       <p>
-        It took me longer than I would like to admit to trace it back. The culprit was a single instruction in my own prompt builder: a timestamp-related line that was dynamically generated at runtime and inserted at the very top of the prompt. Every request got a fresh ISO 8601 timestamp as the first token, which meant every request had a unique prefix from the start. The entire 6,000-token system prompt was being recomputed from scratch on every single call. Removing that line — or more precisely, moving it to after the stable prefix — immediately restored cache hits. Prefill throughput jumped back up, TTFT dropped, and GPU utilization on the prefill side went down noticeably.
+        It took me a while to trace it to my prompt builder. It generated a fresh ISO 8601 timestamp on every call and inserted it at the top. That left nearly the whole system prompt to be recomputed each time. I moved the timestamp after the stable prefix, and the cache hits returned immediately. Prefill throughput recovered, time to first token (TTFT) dropped, and GPU utilization during prefill went down noticeably.
       </p>
       <p>
-        The lesson: if your prefill throughput or TTFT looks worse than it should, check the first few tokens of your prompts across requests before blaming the serving engine. The bug is almost always in the prompt builder, not the cache.
+        If you see a similar slowdown, compare the first few tokens across requests. Prompt construction is one possible cause; cache eviction, routing, and serving configuration are also worth checking.
       </p>
       <figure class="external-figure">
         <img src="../assets/images/posts/prefix-caching-good-vs-bad.svg" alt="Top-versus-bottom comparison of bad and good prompt ordering. The top layout places a timestamp first and causes a cache miss; the bottom layout keeps the stable system prompt and context first so the prefix can be reused." loading="lazy">
         <figcaption>
-          The top layout fails because the timestamp appears before the stable instructions. The bottom layout keeps the shared prefix together first, so the cache can reuse the long invariant portion before it reaches the timestamp and question.
+          Moving the timestamp after the shared instructions lets the engine reuse the long prefix.
         </figcaption>
       </figure>
 
@@ -351,33 +375,23 @@ print(r2.usage.cache_creation_input_tokens)
       </figure>
 
       <p>
-        The fix is not complicated, but it requires discipline in prompt construction: keep the invariant portion at the front and push per-request values toward the end. If some metadata truly must be included, try to append it after the stable instruction and context instead of prepending it.
+        The timestamp could stay in the prompt. It just needed to come after the text that was identical across requests. The same applies to user IDs and other request metadata.
       </p>
 
-      <blockquote>
-        <p>
-          Prefix caching rewards prompt stability. It is less about turning a feature on and more about arranging your prompt so the engine has something reusable to work with.
-        </p>
-      </blockquote>
-
-      <h3 id="practical-checklist">A practical checklist I now follow</h3>
+      <h3 id="practical-checklist">What I check now</h3>
       <ul class="checklist">
-        <li>Ask: what part of this prompt is identical across requests?</li>
-        <li>Place that invariant prefix first.</li>
-        <li>Append timestamps, user IDs, and request metadata later.</li>
-        <li>Keep formatting stable across requests so tokenization stays stable too.</li>
-        <li>When benchmarking, measure prefill-heavy workloads, not just end-to-end latency.</li>
+        <li>Compare consecutive prompts to find the shared text.</li>
+        <li>Put that text first.</li>
+        <li>Append timestamps, user IDs, and request metadata after it.</li>
+        <li>Check formatting as well as content; whitespace can change the tokens.</li>
+        <li>Include workloads with long prompts when benchmarking, and measure prefill performance alongside total latency.</li>
       </ul>
 
       <hr>
 
-      <h2 id="conclusion">Conclusion</h2>
+      <h2 id="conclusion">Check the actual prompts</h2>
       <p>
-        Prefix caching is one of the cleanest wins in LLM inference, but only if your prompts are structured to make reuse possible. The serving engine already does the hard systems work. The application-side job is to stop breaking the prefix.
-      </p>
-
-      <p>
-        If your cache hit rate is mysteriously poor, inspect the first tokens of consecutive prompts before tweaking anything deeper. In my experience, the bug is often not in the inference engine. It is in the prompt builder.
+        In my case, moving one line fixed the cache misses. If your hit rate is lower than you expect, look at two prompts after all the template fields have been filled in. Find the first token that differs. That tells you how much of the beginning the cache can potentially reuse.
       </p>
 
       <h2 id="references">References</h2>
@@ -396,12 +410,24 @@ print(r2.usage.cache_creation_input_tokens)
     </div>
   </article>
 
+    <aside class="post-continuation container" aria-labelledby="continue-title">
+      <div class="post-endnote"><span aria-hidden="true">✳</span><p>Thanks for reading.</p><a href="../#posts">All posts <span aria-hidden="true">↗</span></a></div>
+      <div class="continue-heading"><h2 id="continue-title">Another post</h2><span class="eyebrow">On the blog</span></div>
+      <a class="continue-card" href="tokenflow-lab-llm-streaming-simulator.html">
+        <img src="../assets/images/tokenflow-cover.webp" alt="A green typewriter with blank paper curling across a wooden desk." width="1536" height="1024" loading="lazy">
+        <div class="continue-copy"><span class="eyebrow">LLM Tools · 3 min read</span><h3>TokenFlow Lab: an LLM streaming simulator</h3><p>A browser tool I built to compare token rates, tokenizers, and streaming modes.</p></div>
+        <span class="continue-arrow" aria-hidden="true">↗</span>
+      </a>
+    </aside>
+  </main>
+
   <footer class="footer">
-    <div class="container">
-      <p>&copy; <span id="year"></span> Nitin. Built with curiosity and caffeine.</p>
+    <div class="container footer-inner">
+      <a class="footer-logo" href="../"><span class="brand-symbol" aria-hidden="true"><img class="logo-for-light" src="../assets/images/identity/nitin-logo-light.png" alt="" width="512" height="512"><img class="logo-for-dark" src="../assets/images/identity/nitin-logo-dark.png" alt="" width="512" height="512"></span><span>nitin.</span></a>
+      <p>&copy; <span id="year">2026</span> Nitin.</p>
+      <a href="#main-content" class="back-to-top">Back to top <span aria-hidden="true">↑</span></a>
     </div>
   </footer>
-
   <script src="../assets/js/main.js"></script>
 </body>
 </html>
