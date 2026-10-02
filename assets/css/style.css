@@ -89,6 +89,9 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 .post-art{display:flex;align-items:center;justify-content:center;min-width:0;position:relative;overflow:hidden;background:#e5ebdf}
 .post-card:nth-child(even) .post-art{background:#eee9dd}
 .post-art>img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease-out);min-height:310px}
+.post-card[data-category="Game Tools"] .post-art{background:#11100e;aspect-ratio:auto;padding:14px}
+.post-card[data-category="Game Tools"] .post-art>img{height:auto;min-height:0;object-fit:contain;background:#11100e;transform:none}
+.preview-cover[src*="/images/wukong/"]{height:auto;object-fit:contain;background:#11100e;padding:58px 18px 18px}
 .post-art:hover>img{transform:scale(1.025)}
 .art-label{position:absolute;bottom:16px;left:23px;right:23px;display:flex;justify-content:space-between;text-transform:uppercase;letter-spacing:1.6px;font-size:8px;color:#41523f}
 .art-label>span{font-size:17px;line-height:1}

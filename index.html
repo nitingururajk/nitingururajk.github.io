@@ -55,19 +55,31 @@
     <section class="writing-section container" id="posts" aria-labelledby="writing-title">
       <div class="section-heading">
         <div><p class="eyebrow">The blog</p><h2 id="writing-title">Recent posts<span class="heading-dot">.</span></h2></div>
-        <span class="article-count" id="post-count">02 posts</span>
+        <span class="article-count" id="post-count">03 posts</span>
       </div>
       <div class="post-filters" id="post-filters" role="group" aria-label="Filter articles by topic" hidden>
-        <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All posts <span>02</span></button>
+        <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All posts <span>03</span></button>
+        <button class="filter-button" type="button" data-filter="Game Tools" aria-pressed="false">Game Tools</button>
         <button class="filter-button" type="button" data-filter="LLM Tools" aria-pressed="false">LLM Tools</button>
         <button class="filter-button" type="button" data-filter="LLM Systems" aria-pressed="false">LLM Systems</button>
       </div>
       <p class="sr-only" id="filter-status" role="status" aria-live="polite"></p>
       <div class="posts-grid" id="posts-grid">
-        <article class="post-card featured" data-category="LLM Tools">
-          <a class="post-art" href="posts/tokenflow-lab-llm-streaming-simulator.html" tabindex="-1" aria-hidden="true"><img src="assets/images/tokenflow-cover.webp" width="1536" height="1024" alt="" loading="eager"></a>
+        <article class="post-card featured" data-category="Game Tools">
+          <a class="post-art" href="posts/black-myth-wukong-achievement-tracker.html" tabindex="-1" aria-hidden="true"><img src="assets/images/wukong/tracker-landing-08374ded5e6c.png" width="1440" height="802" alt="" data-description="The Black Myth: Wukong Achievement Tracker upload page, with Wukong holding his staff beside the save-file controls." loading="eager"></a>
           <div class="post-card-content">
-            <div class="card-topline"><span class="post-tag">LLM Tools</span><span class="featured-label"><span aria-hidden="true">✳</span> Latest post</span></div>
+            <div class="card-topline"><span class="post-tag">Game Tools</span><span class="featured-label"><span aria-hidden="true">✳</span> Latest post</span></div>
+            <h3 class="post-title"><a href="posts/black-myth-wukong-achievement-tracker.html">Chasing platinum in Black Myth: Wukong</a></h3>
+            <p class="post-excerpt">I wanted platinum, but working out which collectibles I was missing had become a chore. So I tried asking the save file.</p>
+            <div class="post-meta"><time datetime="2026-09-30">Sep 30, 2026</time><span aria-hidden="true">·</span><span class="read-time">6 min read</span></div>
+            <div class="card-actions"><a class="text-link read-link" href="posts/black-myth-wukong-achievement-tracker.html">Read post <span aria-hidden="true">↗</span></a><button class="preview-button" type="button" aria-haspopup="dialog" hidden><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg>Quick preview</button></div>
+            <div class="preview-source" hidden><p>I started Journey Ledger to find the items I was missing on my own hunt for platinum. This is the story of decoding the saves, fixing the wrong soak IDs, and turning the results into a tool that could help other Wukong fans too.</p><ul><li>Getting a useful collection checklist out of the game&#x27;s save records.</li><li>Following one missing soak into the game&#x27;s own item tables.</li><li>Finding out why a first playthrough was being mistaken for New Game+.</li></ul></div>
+          </div>
+        </article>
+        <article class="post-card" data-category="LLM Tools">
+          <a class="post-art" href="posts/tokenflow-lab-llm-streaming-simulator.html" tabindex="-1" aria-hidden="true"><img src="assets/images/tokenflow-cover.webp" width="1536" height="1024" alt="" loading="lazy"></a>
+          <div class="post-card-content">
+            <div class="card-topline"><span class="post-tag">LLM Tools</span><span class="entry-number">Post 02</span></div>
             <h3 class="post-title"><a href="posts/tokenflow-lab-llm-streaming-simulator.html">TokenFlow Lab: an LLM streaming simulator</a></h3>
             <p class="post-excerpt">A browser tool I built to see what different token rates look like in a chat response.</p>
             <div class="post-meta"><time datetime="2026-04-30">Apr 30, 2026</time><span aria-hidden="true">·</span><span class="read-time">3 min read</span></div>

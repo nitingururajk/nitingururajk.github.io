@@ -1,0 +1,439 @@
+{
+  "date": "2026-10-02",
+  "sourceRevision": "42b7c81bbf865c3265db7c0ce51f5b076a104de5",
+  "environment": "Local .NET 10 app; seven existing, untracked save fixtures. No platform account API was queried.",
+  "method": "One real multipart upload per fixture, plus seven invalid-request checks. No save mutation or synthetic success responses.",
+  "privacy": "Only aggregate counts and item labels are exported. Player names, paths, account IDs and save bytes are omitted.",
+  "samples": [
+    {
+      "sample": "before_erlang",
+      "bytes": 2445262,
+      "status": 200,
+      "chapterId": 60,
+      "newGamePlusCount": 0,
+      "rawAchievementRows": 180,
+      "totalAchievements": 81,
+      "complete": 46,
+      "remaining": 35,
+      "absentPlatformRows": 0,
+      "displayedMissingTargets": 163,
+      "soaksCollected": 9,
+      "soaksTracked": 27,
+      "missingSoaks": [
+        {
+          "id": 2301,
+          "name": "Soak: Guanyin's Willow Leaf"
+        },
+        {
+          "id": 2302,
+          "name": "Soak: Flower Primes"
+        },
+        {
+          "id": 2303,
+          "name": "Soak: Turtle Tear"
+        },
+        {
+          "id": 2304,
+          "name": "Soak: Stranded Loong's Whisker"
+        },
+        {
+          "id": 2308,
+          "name": "Soak: Undying Vine"
+        },
+        {
+          "id": 2309,
+          "name": "Soak: Tiger Relic"
+        },
+        {
+          "id": 2310,
+          "name": "Soak: Laurel Buds"
+        },
+        {
+          "id": 2311,
+          "name": "Soak: Sweet Ice"
+        },
+        {
+          "id": 2312,
+          "name": "Soak: Thunderbolt Horn"
+        },
+        {
+          "id": 2314,
+          "name": "Soak: Purple-Veined Peach Pit"
+        },
+        {
+          "id": 2316,
+          "name": "Soak: Iron Pellet"
+        },
+        {
+          "id": 2317,
+          "name": "Soak: Slumbering Beetle Husk"
+        },
+        {
+          "id": 2319,
+          "name": "Soak: Goji Shoots"
+        },
+        {
+          "id": 2321,
+          "name": "Soak: Flame Mediator"
+        },
+        {
+          "id": 2324,
+          "name": "Soak: Graceful Orchid"
+        },
+        {
+          "id": 2325,
+          "name": "Soak: Tender Jade Lotus"
+        },
+        {
+          "id": 2326,
+          "name": "Soak: Steel Ginseng"
+        },
+        {
+          "id": 2327,
+          "name": "Soak: Goat Skull"
+        }
+      ],
+      "ngPlusFallbacks": [],
+      "canonicalIdsVerified": true,
+      "responseNoStore": true
+    },
+    {
+      "sample": "chapter3_midgame",
+      "bytes": 1293241,
+      "status": 200,
+      "chapterId": 30,
+      "newGamePlusCount": 0,
+      "rawAchievementRows": 180,
+      "totalAchievements": 81,
+      "complete": 19,
+      "remaining": 62,
+      "absentPlatformRows": 0,
+      "displayedMissingTargets": 248,
+      "soaksCollected": 2,
+      "soaksTracked": 27,
+      "missingSoaks": [
+        {
+          "id": 2301,
+          "name": "Soak: Guanyin's Willow Leaf"
+        },
+        {
+          "id": 2302,
+          "name": "Soak: Flower Primes"
+        },
+        {
+          "id": 2303,
+          "name": "Soak: Turtle Tear"
+        },
+        {
+          "id": 2304,
+          "name": "Soak: Stranded Loong's Whisker"
+        },
+        {
+          "id": 2305,
+          "name": "Soak: Mount Lingtai Seedlings"
+        },
+        {
+          "id": 2306,
+          "name": "Soak: Breath of Fire"
+        },
+        {
+          "id": 2307,
+          "name": "Soak: Celestial Lotus Seeds"
+        },
+        {
+          "id": 2308,
+          "name": "Soak: Undying Vine"
+        },
+        {
+          "id": 2309,
+          "name": "Soak: Tiger Relic"
+        },
+        {
+          "id": 2311,
+          "name": "Soak: Sweet Ice"
+        },
+        {
+          "id": 2312,
+          "name": "Soak: Thunderbolt Horn"
+        },
+        {
+          "id": 2313,
+          "name": "Soak: Deathstinger"
+        },
+        {
+          "id": 2314,
+          "name": "Soak: Purple-Veined Peach Pit"
+        },
+        {
+          "id": 2315,
+          "name": "Soak: Bee Mountain Stone"
+        },
+        {
+          "id": 2316,
+          "name": "Soak: Iron Pellet"
+        },
+        {
+          "id": 2317,
+          "name": "Soak: Slumbering Beetle Husk"
+        },
+        {
+          "id": 2318,
+          "name": "Soak: Copper Pill"
+        },
+        {
+          "id": 2319,
+          "name": "Soak: Goji Shoots"
+        },
+        {
+          "id": 2320,
+          "name": "Soak: Fruit of Dao"
+        },
+        {
+          "id": 2321,
+          "name": "Soak: Flame Mediator"
+        },
+        {
+          "id": 2322,
+          "name": "Soak: Double-Combed Rooster Blood"
+        },
+        {
+          "id": 2324,
+          "name": "Soak: Graceful Orchid"
+        },
+        {
+          "id": 2325,
+          "name": "Soak: Tender Jade Lotus"
+        },
+        {
+          "id": 2326,
+          "name": "Soak: Steel Ginseng"
+        },
+        {
+          "id": 2327,
+          "name": "Soak: Goat Skull"
+        }
+      ],
+      "ngPlusFallbacks": [],
+      "canonicalIdsVerified": true,
+      "responseNoStore": true
+    },
+    {
+      "sample": "chapter5_redboy",
+      "bytes": 2284401,
+      "status": 200,
+      "chapterId": 50,
+      "newGamePlusCount": 1,
+      "rawAchievementRows": 180,
+      "totalAchievements": 81,
+      "complete": 58,
+      "remaining": 23,
+      "absentPlatformRows": 0,
+      "displayedMissingTargets": 96,
+      "soaksCollected": 18,
+      "soaksTracked": 27,
+      "missingSoaks": [
+        {
+          "id": 2304,
+          "name": "Soak: Stranded Loong's Whisker"
+        },
+        {
+          "id": 2308,
+          "name": "Soak: Undying Vine"
+        },
+        {
+          "id": 2309,
+          "name": "Soak: Tiger Relic"
+        },
+        {
+          "id": 2317,
+          "name": "Soak: Slumbering Beetle Husk"
+        },
+        {
+          "id": 2319,
+          "name": "Soak: Goji Shoots"
+        },
+        {
+          "id": 2320,
+          "name": "Soak: Fruit of Dao"
+        },
+        {
+          "id": 2324,
+          "name": "Soak: Graceful Orchid"
+        },
+        {
+          "id": 2325,
+          "name": "Soak: Tender Jade Lotus"
+        },
+        {
+          "id": 2326,
+          "name": "Soak: Steel Ginseng"
+        }
+      ],
+      "ngPlusFallbacks": [],
+      "canonicalIdsVerified": true,
+      "responseNoStore": true
+    },
+    {
+      "sample": "chapter6_phoenix",
+      "bytes": 2476796,
+      "status": 200,
+      "chapterId": 60,
+      "newGamePlusCount": 1,
+      "rawAchievementRows": 180,
+      "totalAchievements": 81,
+      "complete": 58,
+      "remaining": 23,
+      "absentPlatformRows": 0,
+      "displayedMissingTargets": 96,
+      "soaksCollected": 18,
+      "soaksTracked": 27,
+      "missingSoaks": [
+        {
+          "id": 2304,
+          "name": "Soak: Stranded Loong's Whisker"
+        },
+        {
+          "id": 2308,
+          "name": "Soak: Undying Vine"
+        },
+        {
+          "id": 2309,
+          "name": "Soak: Tiger Relic"
+        },
+        {
+          "id": 2317,
+          "name": "Soak: Slumbering Beetle Husk"
+        },
+        {
+          "id": 2319,
+          "name": "Soak: Goji Shoots"
+        },
+        {
+          "id": 2320,
+          "name": "Soak: Fruit of Dao"
+        },
+        {
+          "id": 2324,
+          "name": "Soak: Graceful Orchid"
+        },
+        {
+          "id": 2325,
+          "name": "Soak: Tender Jade Lotus"
+        },
+        {
+          "id": 2326,
+          "name": "Soak: Steel Ginseng"
+        }
+      ],
+      "ngPlusFallbacks": [],
+      "canonicalIdsVerified": true,
+      "responseNoStore": true
+    },
+    {
+      "sample": "near_perfect",
+      "bytes": 2563092,
+      "status": 200,
+      "chapterId": 60,
+      "newGamePlusCount": 0,
+      "rawAchievementRows": 180,
+      "totalAchievements": 81,
+      "complete": 74,
+      "remaining": 7,
+      "absentPlatformRows": 0,
+      "displayedMissingTargets": 8,
+      "soaksCollected": 26,
+      "soaksTracked": 27,
+      "missingSoaks": [
+        {
+          "id": 2301,
+          "name": "Soak: Guanyin's Willow Leaf"
+        }
+      ],
+      "ngPlusFallbacks": [],
+      "canonicalIdsVerified": true,
+      "responseNoStore": true
+    },
+    {
+      "sample": "ngplus_full_collection",
+      "bytes": 555332,
+      "status": 200,
+      "chapterId": 10,
+      "newGamePlusCount": 3,
+      "rawAchievementRows": 180,
+      "totalAchievements": 81,
+      "complete": 81,
+      "remaining": 0,
+      "absentPlatformRows": 0,
+      "displayedMissingTargets": 0,
+      "soaksCollected": 27,
+      "soaksTracked": 27,
+      "missingSoaks": [],
+      "ngPlusFallbacks": [],
+      "canonicalIdsVerified": true,
+      "responseNoStore": true
+    },
+    {
+      "sample": "progress100",
+      "bytes": 531365,
+      "status": 200,
+      "chapterId": 10,
+      "newGamePlusCount": 3,
+      "rawAchievementRows": 180,
+      "totalAchievements": 81,
+      "complete": 81,
+      "remaining": 0,
+      "absentPlatformRows": 0,
+      "displayedMissingTargets": 0,
+      "soaksCollected": 27,
+      "soaksTracked": 27,
+      "missingSoaks": [],
+      "ngPlusFallbacks": [],
+      "canonicalIdsVerified": true,
+      "responseNoStore": true
+    }
+  ],
+  "invalidRequests": [
+    {
+      "case": "JSON instead of multipart",
+      "expectedStatus": 415,
+      "actualStatus": 415,
+      "error": "Upload one Black Myth: Wukong .sav file."
+    },
+    {
+      "case": "No file",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "error": "Choose exactly one .sav file to analyze."
+    },
+    {
+      "case": "Two files",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "error": "Choose exactly one .sav file to analyze."
+    },
+    {
+      "case": "Wrong extension",
+      "expectedStatus": 415,
+      "actualStatus": 415,
+      "error": "That file is not a .sav file."
+    },
+    {
+      "case": "Empty save",
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "error": "The uploaded save file is empty."
+    },
+    {
+      "case": "Undecodable save",
+      "expectedStatus": 422,
+      "actualStatus": 422,
+      "error": "This file could not be decoded as a Black Myth: Wukong save. Make sure it is an unmodified .sav file and try again."
+    },
+    {
+      "case": "4 MiB plus one byte",
+      "expectedStatus": 413,
+      "actualStatus": 413,
+      "error": "The uploaded save file is too large. The limit is 4 MB."
+    }
+  ]
+}

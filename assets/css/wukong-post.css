@@ -1,0 +1,80 @@
+/* Layout specific to the Journey Ledger project write-up. */
+.title-wukong .title-game { display: block; font-size: .78em; }
+.title-wukong em { display: block; margin-top: .13em; font-size: .84em; }
+.wukong-post .post-subtitle { max-width: 650px; }
+.project-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin: -12px auto 36px; }
+.project-actions .button { gap: 10px; }
+.project-actions .project-icon { display: block; width: 22px; height: 22px; flex: 0 0 22px; }
+.project-actions .button > span[aria-hidden] { margin-left: 8px; }
+.project-actions .button-outline { color: var(--accent); background: transparent; border-color: var(--border-hover); }
+.project-actions .button-outline:hover { background: var(--bg-secondary); }
+.wukong-cover > a { display: block; border-radius: 5px; overflow: hidden; }
+.wukong-cover img { display: block; width: 100%; height: auto; }
+.project-facts { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 740px; margin: 36px auto; padding: 25px 0; border-block: 1px solid var(--border); }
+.project-facts > div { display: flex; flex-direction: column; padding: 0 22px; text-align: center; }
+.project-facts > div + div { border-left: 1px solid var(--border); }
+.project-facts dt { color: var(--text-secondary); font: 11px/1.5 var(--font-sans); }
+.project-facts dd { order: -1; margin: 0 0 7px; color: var(--accent); font: 400 40px/1 var(--font-serif); }
+.wukong-post .project-facts dt { margin-top: 9px; }
+.wukong-shot { margin: 42px auto; }
+.wukong-shot > a { display: block; border-radius: 5px; overflow: hidden; background: #11100e; border: 1px solid var(--border); }
+.wukong-shot img { display: block; width: 100%; height: auto; }
+.wukong-shot figcaption { margin: 13px auto 0; color: var(--text-secondary); font: 12px/1.8 var(--font-sans); }
+.wukong-shot figcaption strong { color: var(--text-primary); }
+.shot-index { color: var(--rust); font: 10px var(--font-mono); letter-spacing: .06em; margin-right: 8px; }
+.pipeline { max-width: 850px; display: grid; grid-template-columns: repeat(4, 1fr); margin: 36px auto; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-secondary); }
+.pipeline > div { position: relative; padding: 24px 22px; }
+.pipeline > div + div { border-left: 1px solid var(--border); }
+.pipeline .pipeline-step { display: block; color: var(--rust); font: 10px var(--font-mono); margin-bottom: 13px; }
+.pipeline strong { display: block; font: 500 22px/1.2 var(--font-serif); }
+.pipeline small { display: block; margin-top: 9px; color: var(--text-secondary); font: 12px/1.65 var(--font-sans); }
+.experiment-table { max-width: 850px; margin: 32px auto; border: 1px solid var(--border); border-radius: 4px; overflow-x: auto; }
+.experiment-table table { width: 100%; border-collapse: collapse; text-align: left; font: 12px/1.65 var(--font-sans); font-variant-numeric: tabular-nums; }
+.experiment-table caption { text-align: left; padding: 17px 20px; color: var(--text-secondary); font: 10px/1.6 var(--font-mono); letter-spacing: .04em; background: var(--bg-secondary); }
+.experiment-table :is(th, td) { padding: 13px 18px; border-top: 1px solid var(--border); vertical-align: top; }
+.experiment-table thead th { font-weight: 600; background: var(--bg-secondary); }
+.experiment-table tbody th { font-weight: 500; }
+.experiment-table .table-focus { background: var(--accent-subtle); }
+.experiment-table code { font: 11px var(--font-mono); overflow-wrap: anywhere; }
+.mobile-study { display: grid; grid-template-columns: minmax(0, 1fr) 285px; gap: 46px; align-items: start; max-width: 850px; margin: 42px auto; }
+.mobile-study .wukong-shot { margin: 0; }
+.mobile-study h3 { margin-top: 8px; }
+.mobile-study p { font-size: 20px; }
+.wukong-post .evidence-note { max-width: 700px; color: var(--text-secondary); font: 12px/1.8 var(--font-sans); }
+.story-detail { max-width: 850px; margin: 32px auto; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-secondary); }
+.story-detail > summary { padding: 20px 24px; cursor: pointer; color: var(--text-primary); font: 500 14px/1.7 var(--font-sans); }
+.story-detail > summary::marker { color: var(--accent); }
+.story-detail > summary > span { display: block; padding-left: 18px; margin-top: 3px; color: var(--text-secondary); font: 10px/1.6 var(--font-mono); }
+.story-detail > summary:hover { color: var(--accent); }
+.story-detail[open] > summary { border-bottom: 1px solid var(--border); }
+.story-detail > .wukong-shot { margin: 0; padding: 18px; }
+.story-notes-body { padding: 24px; font: 14px/1.85 var(--font-sans); }
+.story-notes-body > :last-child { margin-bottom: 0; }
+.story-notes .experiment-table { margin: 26px auto; }
+.post-body .project-actions { max-width: 740px; justify-content: flex-start; margin: 26px auto 36px; }
+.post-body .project-actions .button { color: var(--bg-primary); text-decoration: none; }
+.post-body .project-actions .button-outline { color: var(--accent); }
+@media (max-width: 760px) {
+  .title-wukong .title-game { font-size: .8em; }
+  .pipeline { grid-template-columns: repeat(2, 1fr); }
+  .pipeline > div:nth-child(3) { border-left: 0; }
+  .pipeline > div:nth-child(n+3) { border-top: 1px solid var(--border); }
+  .mobile-study { grid-template-columns: 1fr 235px; gap: 24px; }
+  .experiment-table :is(th, td) { padding: 11px 12px; }
+}
+@media (max-width: 560px) {
+  .title-wukong .title-game { font-size: .69em; }
+  .title-wukong em { font-size: .87em; }
+  .project-actions { gap: 10px; }
+  .project-facts > div { padding-inline: 10px; }
+  .project-facts dd { font-size: 34px; }
+  .project-facts dt { font-size: 10px; }
+  .pipeline > div { padding: 20px 16px; }
+  .pipeline strong { font-size: 21px; }
+  .mobile-study { grid-template-columns: 1fr; gap: 18px; }
+  .mobile-study .wukong-shot { max-width: 300px; margin-inline: auto; }
+  .experiment-table table { min-width: 480px; }
+  .story-detail > summary { padding: 16px; }
+  .story-detail > .wukong-shot { padding: 10px; }
+  .story-notes-body { padding: 16px; }
+}

@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-02",
+  "sourceRevision": "42b7c81",
+  "environment": "Chromium, current deployed landing and real uploads to the local .NET app; 1440px desktop and 390px mobile",
+  "checks": {
+    "productionLandingTitle": true,
+    "productionHero": {
+      "src": "/images/journey-hero-v2.webp",
+      "width": 1536,
+      "height": 1024,
+      "fit": "contain"
+    },
+    "nearPerfect": {
+      "complete": 74,
+      "remaining": 7,
+      "ngPlus": 0
+    },
+    "all81Rendered": true,
+    "remainingFilterReturned7": true,
+    "willowSearchMatchedSoakGuide": true,
+    "soakChecklistRows": 27,
+    "soakChecklistMissing": 1,
+    "spoilerToggleHidAndRestoredItemNames": true,
+    "noMobileOverflow": true,
+    "firstJourneyCorrect": true,
+    "missableWarningVisible": true,
+    "completionCeremonyFor81": true,
+    "noPageErrors": true
+  },
+  "screenshots": [
+    {
+      "file": "tracker-landing-08374ded5e6c.png",
+      "width": 1440,
+      "height": 802,
+      "origin": "production landing",
+      "sourceFile": "tracker-landing.png",
+      "sha256": "08374ded5e6c87804a0fdde70336a99acd601283f3857048c5c0b90e2ed3116a"
+    },
+    {
+      "file": "journey-overview-3f16708bd95c.png",
+      "width": 1256,
+      "height": 998,
+      "origin": "local upload",
+      "sourceFile": "journey-overview.png",
+      "sha256": "3f16708bd95c66901a7e819c0d0b54ee9899a624ad2c058c1128fd3f68acad95"
+    },
+    {
+      "file": "missing-collectibles-0bb84d295450.png",
+      "width": 1256,
+      "height": 1900,
+      "origin": "local upload",
+      "sourceFile": "missing-collectibles.png",
+      "sha256": "0bb84d2954503136e328268858624cd2390cf0aaf7d0ca5980f24622e1913d95"
+    },
+    {
+      "file": "soak-requirements-a02f2bc5ab34.png",
+      "width": 1256,
+      "height": 2697,
+      "origin": "local upload",
+      "sourceFile": "soak-requirements.png",
+      "sha256": "a02f2bc5ab34067abc44ee2aaece0d74de7b87fcccfff88796ed216a8f1786fc"
+    },
+    {
+      "file": "mobile-overview-fc40d6224446.png",
+      "width": 382,
+      "height": 1179,
+      "origin": "local upload",
+      "sourceFile": "mobile-overview.png",
+      "sha256": "fc40d6224446620145d3b01cf2e56edf06301a3929b2655e0cf4eaca23014de1"
+    },
+    {
+      "file": "missable-route-8695c87ae5cd.png",
+      "width": 1256,
+      "height": 903,
+      "origin": "local upload",
+      "sourceFile": "missable-route.png",
+      "sha256": "8695c87ae5cd37f807359303b917411cd0a6c69b3d6d3f7a590ce731b24b6931"
+    },
+    {
+      "file": "journey-complete-600c91f2b01d.png",
+      "width": 1256,
+      "height": 566,
+      "origin": "local upload",
+      "sourceFile": "journey-complete.png",
+      "sha256": "600c91f2b01d57c1b87b81a56a0bc9b3b2c1b3002587b996e6eb2eba88ebaa22"
+    }
+  ],
+  "redactions": "Player names and save filenames are replaced at capture time. UI content and achievement results are otherwise unchanged.",
+  "assetVersioning": "Published filenames include the first 12 characters of each PNG SHA-256 so replacement screenshots do not reuse a cached URL. Original capture files are retained."
+}

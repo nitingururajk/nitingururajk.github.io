@@ -1,5 +1,23 @@
 [
 	{
+		"title": "Chasing platinum in Black Myth: Wukong",
+		"excerpt": "I wanted platinum, but working out which collectibles I was missing had become a chore. So I tried asking the save file.",
+		"date": "2026-09-30",
+		"tag": "Game Tools",
+		"url": "posts/black-myth-wukong-achievement-tracker.html",
+		"readTime": "6 min read",
+		"category": "projects",
+		"number": "03",
+		"image": "assets/images/wukong/tracker-landing-08374ded5e6c.png",
+		"imageAlt": "The Black Myth: Wukong Achievement Tracker upload page, with Wukong holding his staff beside the save-file controls.",
+		"preview": "I started Journey Ledger to find the items I was missing on my own hunt for platinum. This is the story of decoding the saves, fixing the wrong soak IDs, and turning the results into a tool that could help other Wukong fans too.",
+		"takeaways": [
+			"Getting a useful collection checklist out of the game's save records.",
+			"Following one missing soak into the game's own item tables.",
+			"Finding out why a first playthrough was being mistaken for New Game+."
+		]
+	},
+	{
 		"title": "TokenFlow Lab: an LLM streaming simulator",
 		"excerpt": "A browser tool I built to see what different token rates look like in a chat response.",
 		"date": "2026-04-30",

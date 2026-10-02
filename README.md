@@ -83,3 +83,5 @@ The related [blog post](posts/tokenflow-lab-llm-streaming-simulator.html) explai
 ## Publish
 
 This repository is served directly by GitHub Pages. In the repository's **Settings → Pages**, select the publishing branch and its root directory. No build tooling is required for the blog.
+
+The `.nojekyll` marker keeps the files unchanged, including the downloadable Markdown experiment notes.
